@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import CssBaseline from "@mui/material/CssBaseline";
+
+import SharedLayout from "./routes/SharedLayout";
+import Home from "./routes/Home";
+import Login from "./routes/Login";
+
+const Shop = () => {
+  return <h1>Ben mağaza sayfasıyım</h1>;
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <CssBaseline />
+      <Routes>
+        <Route path="/" element={<SharedLayout />}>
+          <Route index element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/sign-in" element={<Login />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 
