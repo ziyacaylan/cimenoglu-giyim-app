@@ -11,6 +11,8 @@ import SharedLayout from "./routes/SharedLayout";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
 
+import toast, { Toaster } from "react-hot-toast";
+
 //theme
 import { getDesignTokens } from "./theme/theme";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -33,6 +35,7 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Toaster />
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<Home />} />

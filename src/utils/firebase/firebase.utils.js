@@ -1,16 +1,33 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
+import toast from "react-hot-toast";
+
+import { useDispatch } from "react-redux";
+import store from "../../store/store";
+import {
+  login as loginHandle,
+  logout as logoutHandle,
+} from "../../store/auth/authSlice";
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAAmeTE6MeV9adLJD1cG109WQ-lPuWzJqs",
-  authDomain: "cimenoglugiyimapp.firebaseapp.com",
-  projectId: "cimenoglugiyimapp",
-  storageBucket: "cimenoglugiyimapp.appspot.com",
-  messagingSenderId: "583355618981",
-  appId: "1:583355618981:web:b40b4b2c8b0871a2fa1f4c",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_ID,
 };
 
 // Initialize Firebase
@@ -45,3 +62,56 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   }
   return userDocRef;
 };
+
+export const register = async (email, password) => {
+  try {
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return user;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+export const login = async (email, password) => {
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return user;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+export const logut = async () => {
+  try {
+    await signOut(auth);
+    return true;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+// login with google
+export const logGoogleUser = async () => {
+  try {
+    const { user } = await signInWithGooglePopup();
+    await createUserDocumentFromAuth(user);
+    return user;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+onAuthStateChanged(auth, (user) => {
+  const dispatch = useDispatch();
+  if (user) {
+    dispatch(loginHandle(user));
+    console.log("selam ben yazdım");
+    // ...
+  } else {
+    console.log("güle güle....");
+  }
+});

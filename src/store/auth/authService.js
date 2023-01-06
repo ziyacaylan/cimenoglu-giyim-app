@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import {
-  signInWithGooglePopup,
-  createUserDocumentFromAuth,
-} from "../../utils/firebase/firebase.utils";
+import { login as loginHandle } from "../../utils/firebase/firebase.utils";
 
-// export const logGoogleUser = createAsyncThunk();
+// register firebase
+export const register = createAsyncThunk(
+  "user/registerAsync",
+  async (email, password) => {
+    const user = await loginHandle(email, password);
+    return user;
+  }
+);

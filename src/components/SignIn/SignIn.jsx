@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
+  login,
+  logGoogleUser,
 } from "../../utils/firebase/firebase.utils";
 
 import Avatar from "@mui/material/Avatar";
@@ -13,12 +15,29 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import GoogleButton from "react-google-button";
+import { useNavigate } from "react-router-dom";
+
+//import { useDispatch } from "react-redux";
+//import { login as loginHandle } from "../../utils/firebase/firebase.utils";
 
 const SignIn = () => {
-  const logGoogleUser = async () => {
-    const { user } = await signInWithGooglePopup();
-    console.log(user);
-    await createUserDocumentFromAuth(user);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  //const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const user = await login(email, password);
+    if (user) {
+      //dispatch(loginHandle(user));
+      navigate("/", { replace: true });
+      console.log(user);
+    }
+  };
+
+  const handleSubmitLoginWithGoogle = async () => {
+    const user = await logGoogleUser();
   };
 
   return (
@@ -42,32 +61,31 @@ const SignIn = () => {
         <Typography variant="caption" display="block" gutterBottom>
           Sign in with your email and password
         </Typography>
-        <Box
-          component="form"
-          noValidate
-          // onSubmit={handleSubmit}
-          sx={{ mt: 3 }}
-        >
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                id="email"
+                id="sign-in_email"
                 label="Email Address"
-                name="email"
+                name="sign-in_email"
                 autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                name="password"
+                name="sign-in_password"
                 label="Password"
                 type="password"
-                id="password"
+                id="sign-in_password"
                 autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -89,10 +107,7 @@ const SignIn = () => {
             >
               OR
             </Typography>
-
-            <GoogleButton onClick={() => logGoogleUser()}>
-              {/* Sign Up with Google Popup */}
-            </GoogleButton>
+            <GoogleButton onClick={handleSubmitLoginWithGoogle} />
           </Box>
         </Box>
       </Box>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -9,10 +9,21 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 
+import { register as registerAsync } from "../../utils/firebase/firebase.utils";
+import { useDispatch } from "react-redux";
+// import { login as loginHandle } from "../../store/auth/authSlice";
+//import { register } from "../../store/auth/authSlice";
+
 const SignUp = () => {
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  // };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    //const user = await register(email, password);
+    await dispatch(registerAsync(email, password));
+  };
 
   return (
     <Box sx={{ width: "350px", margin: "10px" }}>
@@ -33,12 +44,7 @@ const SignUp = () => {
         <Typography variant="caption" display="block" gutterBottom>
           Sign up with your email and password
         </Typography>
-        <Box
-          component="form"
-          noValidate
-          // onSubmit={handleSubmit}
-          sx={{ mt: 3 }}
-        >
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -48,6 +54,8 @@ const SignUp = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -59,6 +67,8 @@ const SignUp = () => {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -74,6 +84,7 @@ const SignUp = () => {
             </Grid>
           </Grid>
           <Button
+            disabled={!email || !password}
             type="submit"
             fullWidth
             variant="contained"

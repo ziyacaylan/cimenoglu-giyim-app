@@ -8,7 +8,11 @@ import "./navigation.styles.scss";
 import DarkModeSwitch from "../../components/DarkModeWsitch";
 import ShoppingBasket from "../../components/Basket";
 
+import { useSelector } from "react-redux";
+
 const Navigation = () => {
+  const user = useSelector((state) => state.auth.user);
+  console.log("user ı aldım geldim", user);
   return (
     <div className="navigation">
       <Link to="/">
