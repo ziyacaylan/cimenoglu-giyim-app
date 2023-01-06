@@ -3,12 +3,20 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
-import { useColorContext } from "../../context/ColorContext";
 
-const DarkModeSwitch = ({ darkMode }) => {
-  const [checked, setChecked] = useState(false);
+// import { useColorContext } from "../../context/ColorContext";
 
-  const { toggleMode } = useColorContext();
+// form theme
+import { useSelector, useDispatch } from "react-redux";
+import { asyncToggleTheme } from "../../store/theme/themeSlice";
+
+const DarkModeSwitch = () => {
+  // const [checked, setChecked] = useState(false);
+
+  const dispatch = useDispatch();
+  const darkMode = useSelector((state) => state.theme.darkMode);
+
+  // const { toggleMode } = useColorContext();
 
   // useEffect(() => {
   //   darkMode === "light" ? "dark" : "light";
@@ -68,10 +76,9 @@ const DarkModeSwitch = ({ darkMode }) => {
           control={
             <MaterialUISwitch
               // sx={{ m: "auto" }}
-              defaultChecked={checked}
+              defaultChecked={!darkMode}
               onClick={(e) => {
-                setChecked((e) => !e);
-                toggleMode();
+                dispatch(asyncToggleTheme());
               }}
             />
           }

@@ -8,7 +8,7 @@ import "./navigation.styles.scss";
 import DarkModeSwitch from "../../components/DarkModeWsitch";
 import ShoppingBasket from "../../components/Basket";
 
-const Navigation = ({ darkMode, checked }) => {
+const Navigation = () => {
   return (
     <div className="navigation">
       <Link to="/">
@@ -23,7 +23,7 @@ const Navigation = ({ darkMode, checked }) => {
           <Link className="nav-link" to="/sign-in">
             <Button variant="outlined">SIGN IN</Button>
           </Link>
-          <DarkModeSwitch darkMode={darkMode} checked={checked} />
+          <DarkModeSwitch />
           <ShoppingBasket />
         </Stack>
       </div>
