@@ -9,20 +9,26 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 
-import { register as registerAsync } from "../../utils/firebase/firebase.utils";
+import { register } from "../../utils/firebase/firebase.utils";
 import { useDispatch } from "react-redux";
-// import { login as loginHandle } from "../../store/auth/authSlice";
-//import { register } from "../../store/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { login as loginHandle } from "../../store/auth/authSlice";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //const user = await register(email, password);
-    await dispatch(registerAsync(email, password));
+    const user = await register(email, password);
+    if (user) {
+      // store.dispatch(login(email, password));
+      dispatch(loginHandle(user));
+      navigate("/", { replace: true });
+    }
+    console.log(user);
   };
 
   return (

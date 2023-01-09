@@ -8,13 +8,11 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
-import { useDispatch } from "react-redux";
-import store from "../../store/store";
 import {
   login as loginHandle,
   logout as logoutHandle,
@@ -47,7 +45,7 @@ export const db = getFirestore();
 
 export const createUserDocumentFromAuth = async (userAuth) => {
   const userDocRef = doc(db, "users", userAuth.uid);
-  console.log(userDocRef);
+  // console.log(userDocRef);
   const userSnapshot = await getDoc(userDocRef);
   console.log(userSnapshot);
   console.log(userSnapshot.exists());
@@ -78,7 +76,10 @@ export const register = async (email, password) => {
 
 export const login = async (email, password) => {
   try {
+    console.log("istek aldım");
+    console.log(email, password);
     const { user } = await signInWithEmailAndPassword(auth, email, password);
+    console.log("bunu aldım yolluyom", user);
     return user;
   } catch (error) {
     toast.error(error.message);
@@ -105,13 +106,13 @@ export const logGoogleUser = async () => {
   }
 };
 
-onAuthStateChanged(auth, (user) => {
-  const dispatch = useDispatch();
-  if (user) {
-    dispatch(loginHandle(user));
-    console.log("selam ben yazdım");
-    // ...
-  } else {
-    console.log("güle güle....");
-  }
-});
+// onAuthStateChanged(auth, (user) => {
+//   if (user) {
+//     store.dispatch(loginHandle(user));
+//     //console.log("selam ben yazdım");
+//     //console.log(user.email);
+//     // ...
+//   } else {
+//     console.log("güle güle....");
+//   }
+// });

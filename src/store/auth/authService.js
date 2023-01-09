@@ -1,12 +1,26 @@
+// import { async } from "@firebase/util";
+import { async } from "@firebase/util";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { login as loginHandle } from "../../utils/firebase/firebase.utils";
+import { register, login } from "../../utils/firebase/firebase.utils";
 
 // register firebase
-export const register = createAsyncThunk(
+export const registerAsync = createAsyncThunk(
   "user/registerAsync",
-  async (email, password) => {
-    const user = await loginHandle(email, password);
+  async ({ email, password }) => {
+    const user = await register(email, password);
+    return user;
+  }
+);
+
+// login firebase
+export const loginAsync = createAsyncThunk(
+  "firebase.utils/login",
+  async ({ email, password }) => {
+    console.log("-->", password);
+    console.log("-->", email);
+    const user = await login(email, password);
+    console.log("tanka gelen : ", user);
     return user;
   }
 );

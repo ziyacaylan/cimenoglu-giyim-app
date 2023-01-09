@@ -17,22 +17,30 @@ import Typography from "@mui/material/Typography";
 import GoogleButton from "react-google-button";
 import { useNavigate } from "react-router-dom";
 
-//import { useDispatch } from "react-redux";
-//import { login as loginHandle } from "../../utils/firebase/firebase.utils";
+import { useDispatch } from "react-redux";
+
+import { login as loginHandle } from "../../store/auth/authSlice";
+import { store } from "../../store/store";
+import { loginAsync } from "../../store/auth/authService";
+import { async } from "@firebase/util";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const user = await login(email, password);
+    // if (email || password) return;
+    //const user = await login(email, password);
+    console.log(password);
+    const user = await dispatch(loginAsync({ email, password }));
+
     if (user) {
-      //dispatch(loginHandle(user));
+      //store.dispatch(loginHandle(user));
       navigate("/", { replace: true });
-      console.log(user);
+      console.log("bu nedir ? ", user);
     }
   };
 
