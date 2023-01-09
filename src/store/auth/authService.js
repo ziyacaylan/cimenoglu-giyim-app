@@ -2,7 +2,7 @@
 import { async } from "@firebase/util";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { register, login } from "../../utils/firebase/firebase.utils";
+import { register, login, logut } from "../../utils/firebase/firebase.utils";
 
 // register firebase
 export const registerAsync = createAsyncThunk(
@@ -17,10 +17,16 @@ export const registerAsync = createAsyncThunk(
 export const loginAsync = createAsyncThunk(
   "firebase.utils/login",
   async ({ email, password }) => {
-    console.log("-->", password);
-    console.log("-->", email);
     const user = await login(email, password);
-    console.log("tanka gelen : ", user);
     return user;
+  }
+);
+
+// logout firebase
+export const logoutAsync = createAsyncThunk(
+  "firebase.utils/logout",
+  async () => {
+    const result = await logut();
+    return result;
   }
 );

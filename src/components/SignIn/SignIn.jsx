@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  signInWithGooglePopup,
-  createUserDocumentFromAuth,
-  login,
-  logGoogleUser,
-} from "../../utils/firebase/firebase.utils";
+import { login, logGoogleUser } from "../../utils/firebase/firebase.utils";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -16,36 +11,32 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import GoogleButton from "react-google-button";
 import { useNavigate } from "react-router-dom";
-
-import { useDispatch } from "react-redux";
-
-import { login as loginHandle } from "../../store/auth/authSlice";
-import { store } from "../../store/store";
-import { loginAsync } from "../../store/auth/authService";
-import { async } from "@firebase/util";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // if (email || password) return;
-    //const user = await login(email, password);
-    console.log(password);
-    const user = await dispatch(loginAsync({ email, password }));
+
+    if (!email || !password) {
+      toast.error("Email and Password required...!");
+      return;
+    }
+    const user = await login(email, password);
 
     if (user) {
-      //store.dispatch(loginHandle(user));
       navigate("/", { replace: true });
-      console.log("bu nedir ? ", user);
     }
   };
 
   const handleSubmitLoginWithGoogle = async () => {
     const user = await logGoogleUser();
+    if (user) {
+      navigate("/", { replace: true });
+    }
   };
 
   return (

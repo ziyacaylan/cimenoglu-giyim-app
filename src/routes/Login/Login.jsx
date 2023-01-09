@@ -18,7 +18,7 @@ const Login = () => {
         fontSize: "1.8rem",
         color: grey[800],
         // minHeight: "175px",
-        backgroundColor: "whitesmoke",
+        // backgroundColor: "whitesmoke",
       }}
     >
       <CardContent

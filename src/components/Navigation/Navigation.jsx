@@ -9,7 +9,7 @@ import DarkModeSwitch from "../../components/DarkModeWsitch";
 import ShoppingBasket from "../../components/Basket";
 
 import { useSelector } from "react-redux";
-import { logout } from "../../store/auth/authSlice";
+import { logoutAsync } from "../../store/auth/authService";
 import { useDispatch } from "react-redux";
 
 const Navigation = () => {
@@ -31,7 +31,7 @@ const Navigation = () => {
           <Link className="nav-link" to="/sign-in">
             <Button
               variant="outlined"
-              onClick={() => (user ? dispatch(logout()) : "")}
+              onClick={() => (user ? dispatch(logoutAsync()) : "")}
             >
               {user ? "logout" : "SIGN IN"}
             </Button>

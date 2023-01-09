@@ -14,14 +14,27 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login as loginHandle } from "../../store/auth/authSlice";
 
+import toast from "react-hot-toast";
+
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !password || !rePassword) {
+      toast.error("Email, Password and Confir Password required...!");
+      return;
+    }
+    if (password !== rePassword) {
+      toast.error("Passwords entered do not match...!");
+      return;
+    }
     const user = await register(email, password);
     if (user) {
       // store.dispatch(login(email, password));
@@ -86,11 +99,12 @@ const SignUp = () => {
                 type="password"
                 id="confirmPassword"
                 autoComplete="new-password"
+                value={rePassword}
+                onChange={(e) => setRePassword(e.target.value)}
               />
             </Grid>
           </Grid>
           <Button
-            disabled={!email || !password}
             type="submit"
             fullWidth
             variant="contained"

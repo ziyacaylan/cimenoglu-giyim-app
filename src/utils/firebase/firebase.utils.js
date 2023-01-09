@@ -10,13 +10,13 @@ import {
 } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 import {
   login as loginHandle,
   logout as logoutHandle,
 } from "../../store/auth/authSlice";
+import { store } from "../../store/store";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -37,30 +37,27 @@ provider.setCustomParameters({
 });
 export const auth = getAuth();
 
-export const signInWithGooglePopup = () => {
-  return signInWithPopup(auth, provider);
-};
-
 export const db = getFirestore();
 
 export const createUserDocumentFromAuth = async (userAuth) => {
   const userDocRef = doc(db, "users", userAuth.uid);
   // console.log(userDocRef);
   const userSnapshot = await getDoc(userDocRef);
-  console.log(userSnapshot);
-  console.log(userSnapshot.exists());
+  //console.log(userSnapshot);
+  //console.log(userSnapshot.exists());
   if (!userSnapshot.exists()) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
     try {
       await setDoc(userDocRef, { displayName, email, createdAt });
     } catch (error) {
-      console.log("Kullanıcı hatası", error.message);
+      console.log("User Error: ", error.message);
     }
   }
   return userDocRef;
 };
 
+// register firebase
 export const register = async (email, password) => {
   try {
     const { user } = await createUserWithEmailAndPassword(
@@ -74,10 +71,17 @@ export const register = async (email, password) => {
   }
 };
 
+// login firebase with google
+export const signInWithGooglePopup = async () => {
+  const user = await signInWithPopup(auth, provider);
+  return user;
+};
+
+// login firebase
 export const login = async (email, password) => {
   try {
-    console.log("istek aldım");
-    console.log(email, password);
+    // console.log("istek aldım");
+    // console.log(email, password);
     const { user } = await signInWithEmailAndPassword(auth, email, password);
     console.log("bunu aldım yolluyom", user);
     return user;
@@ -86,6 +90,7 @@ export const login = async (email, password) => {
   }
 };
 
+// logout
 export const logut = async () => {
   try {
     await signOut(auth);
@@ -106,13 +111,12 @@ export const logGoogleUser = async () => {
   }
 };
 
-// onAuthStateChanged(auth, (user) => {
-//   if (user) {
-//     store.dispatch(loginHandle(user));
-//     //console.log("selam ben yazdım");
-//     //console.log(user.email);
-//     // ...
-//   } else {
-//     console.log("güle güle....");
-//   }
-// });
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    store.dispatch(loginHandle(user));
+    // ...
+  } else {
+    store.dispatch(logoutHandle());
+    console.log("Oturum sonlandırıldı....");
+  }
+});
