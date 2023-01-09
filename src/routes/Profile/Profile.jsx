@@ -5,7 +5,7 @@ import ProfileUpdate from "../../components/ProfileUpdate/ProfileUpdate";
 const Profile = () => {
   return (
     <>
-      <Outlet />
+      <Outlet />{" "}
     </>
   );
 };

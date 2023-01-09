@@ -28,7 +28,7 @@ const SignIn = () => {
     const user = await login(email, password);
 
     if (user) {
-      navigate("/profile", { replace: true });
+      navigate("/profile/update", { replace: true });
     }
   };
 
