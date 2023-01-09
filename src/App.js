@@ -10,16 +10,16 @@ import CssBaseline from "@mui/material/CssBaseline";
 import SharedLayout from "./routes/SharedLayout";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
+import Shop from "./routes/Shop";
+import Profile from "./routes/Profile/Profile";
 
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 //theme
 import { getDesignTokens } from "./theme/theme";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-const Shop = () => {
-  return <h1>Ben mağaza sayfasıyım</h1>;
-};
+import ProfileUpdate from "./components/ProfileUpdate/ProfileUpdate";
+import Orders from "./components/Orders/Orders";
 
 function App() {
   const [mode, setMode] = useState("dark");
@@ -41,6 +41,10 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/sign-in" element={<Login />} />
+            <Route path="/profile" element={<Profile />}>
+              <Route path="/profile/update" element={<ProfileUpdate />} />
+              <Route path="/profile/orders" element={<Orders />} />
+            </Route>
           </Route>
         </Routes>
       </ThemeProvider>

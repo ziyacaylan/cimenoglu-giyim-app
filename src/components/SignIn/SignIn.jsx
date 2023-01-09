@@ -28,7 +28,7 @@ const SignIn = () => {
     const user = await login(email, password);
 
     if (user) {
-      navigate("/", { replace: true });
+      navigate("/profile", { replace: true });
     }
   };
 
