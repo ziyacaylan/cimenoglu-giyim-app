@@ -19,6 +19,9 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button } from "@mui/material";
 
+import { Outlet, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 function createData(id, orderDate, orderSummary, amount, orderDetails) {
   return { id, orderDate, orderSummary, amount, orderDetails };
 }
@@ -32,6 +35,8 @@ const rows = [
 const Orders = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -51,6 +56,12 @@ const Orders = () => {
     onPageChange: PropTypes.func.isRequired,
     page: PropTypes.number.isRequired,
     rowsPerPage: PropTypes.number.isRequired,
+  };
+
+  const clickHandleDetails = () => {
+    if (user) {
+      navigate("/profile/orders/order-details", { replace: true });
+    }
   };
 
   return (
@@ -88,7 +99,9 @@ const Orders = () => {
                 <TableCell align="right">{row.orderSummary}</TableCell>
                 <TableCell align="right">{row.amount}</TableCell>
                 <TableCell align="right">
-                  <Button variant="outlined">order details</Button>
+                  <Button variant="outlined" onClick={clickHandleDetails}>
+                    order details
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

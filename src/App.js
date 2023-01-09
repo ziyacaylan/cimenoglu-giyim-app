@@ -20,6 +20,7 @@ import { getDesignTokens } from "./theme/theme";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ProfileUpdate from "./components/ProfileUpdate/ProfileUpdate";
 import Orders from "./components/Orders/Orders";
+import OrderDetails from "./components/OrderDetails/OrderDetails";
 
 function App() {
   const [mode, setMode] = useState("dark");
@@ -44,6 +45,10 @@ function App() {
             <Route path="/profile" element={<Profile />}>
               <Route path="/profile/update" element={<ProfileUpdate />} />
               <Route path="/profile/orders" element={<Orders />} />
+              <Route
+                path="/profile/orders/order-details"
+                element={<OrderDetails />}
+              />
             </Route>
           </Route>
         </Routes>
