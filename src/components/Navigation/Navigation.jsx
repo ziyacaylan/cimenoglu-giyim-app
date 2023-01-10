@@ -19,7 +19,8 @@ import ProfileMenuButton from "../ProfileMenuButton/ProfileMenuButton";
 const Navigation = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-  console.log("navigation yazdırıyor...", user);
+
+  //console.log("navigation yazdırıyor...", user);
   //console.log("user ı aldım geldim", user);
   return (
     <div className="navigation">

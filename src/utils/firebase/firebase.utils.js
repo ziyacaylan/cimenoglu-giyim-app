@@ -7,6 +7,9 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
+  sendEmailVerification,
+  updatePassword,
 } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -16,6 +19,7 @@ import {
   login as loginHandle,
   logout as logoutHandle,
 } from "../../store/auth/authSlice";
+
 import { store } from "../../store/store";
 
 // Your web app's Firebase configuration
@@ -51,7 +55,7 @@ export const createUserDocumentFromAuth = async (userAuth) => {
     try {
       await setDoc(userDocRef, { displayName, email, createdAt });
     } catch (error) {
-      console.log("User Error: ", error.message);
+      toast.error(error.message);
     }
   }
   return userDocRef;
@@ -83,7 +87,7 @@ export const login = async (email, password) => {
     // console.log("istek aldım");
     // console.log(email, password);
     const { user } = await signInWithEmailAndPassword(auth, email, password);
-    console.log("bunu aldım yolluyom", user);
+    //console.log("bunu aldım yolluyom", user);
     return user;
   } catch (error) {
     toast.error(error.message);
@@ -91,7 +95,7 @@ export const login = async (email, password) => {
 };
 
 // logout
-export const logut = async () => {
+export const logout = async () => {
   try {
     await signOut(auth);
     return true;
@@ -111,12 +115,57 @@ export const logGoogleUser = async () => {
   }
 };
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    store.dispatch(loginHandle(user));
-    // ...
-  } else {
-    store.dispatch(logoutHandle());
-    console.log("Oturum sonlandırıldı....");
+// user state changed
+export const onUserShateChanged = () =>
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      store.dispatch(
+        loginHandle({
+          displayName: auth.currentUser.displayName,
+          email: auth.currentUser.email,
+          emailVerification: auth.currentUser.emailVerified,
+          photoURL: auth.currentUser.photoURL,
+          uid: auth.currentUser.uid,
+        })
+      );
+      return true;
+    } else {
+      store.dispatch(logoutHandle());
+      return false;
+    }
+  });
+
+// update user profile
+export const updateUser = async ({ displayName, photoURL, phoneNumber }) => {
+  try {
+    await updateProfile(auth.currentUser, { displayName, photoURL });
+    toast.success("User updated...!");
+    return true;
+  } catch (error) {
+    toast.error(error.message);
   }
-});
+};
+
+// update user password
+export const resetPassword = async (password) => {
+  try {
+    await updatePassword(auth.currentUser, password);
+    toast.success("Password updated...!");
+    store.dispatch(logout());
+    return true;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+// email verified
+export const emailVerification = async () => {
+  try {
+    await sendEmailVerification(auth.currentUser);
+    toast.success(
+      `Verification mail has been sent to ${auth.currentUser.email} Please check`
+    );
+  } catch (error) {
+    toast.error(error.message);
+  }
+};

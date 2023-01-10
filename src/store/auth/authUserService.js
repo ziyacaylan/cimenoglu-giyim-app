@@ -1,14 +1,24 @@
-// import { async } from "@firebase/util";
-import { async } from "@firebase/util";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  signInWithGooglePopup,
+  register,
+  login,
+  logut,
+} from "../../utils/firebase/firebase.utils";
 
-import { register, login, logut } from "../../utils/firebase/firebase.utils";
-
-// register firebase
+//register firebase
 export const registerAsync = createAsyncThunk(
   "user/registerAsync",
   async ({ email, password }) => {
     const user = await register(email, password);
+    return user;
+  }
+);
+//login with google
+export const loginWithGooglePopup = createAsyncThunk(
+  "firebase.utils/loginWithGoogle",
+  async () => {
+    const user = await signInWithGooglePopup();
     return user;
   }
 );

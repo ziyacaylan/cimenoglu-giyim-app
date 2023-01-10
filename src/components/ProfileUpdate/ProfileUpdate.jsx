@@ -15,16 +15,65 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Typography from "@mui/material/Typography";
+
+import {
+  updateUser,
+  logout,
+  auth,
+  emailVerification,
+  resetPassword,
+} from "../../utils/firebase/firebase.utils";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login, logout as logoutHandle } from "../../store/auth/authSlice";
 
 const ProfileUpdate = () => {
-  const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+  const user = useSelector((state) => state.auth.user);
 
-  const handleClickShowOldPassword = () => setShowOldPassword((show) => !show);
+  const [fullName, setFullName] = useState(user.displayName || "");
+  const [photoUrl, setPhotoUrl] = useState(user.photoURL || "");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+    await updateUser({
+      displayName: fullName.toUpperCase(),
+      photoURL: photoUrl,
+    });
+    dispatch(
+      login({
+        displayName: auth.currentUser.displayName,
+        email: auth.currentUser.email,
+        emailVerification: auth.currentUser.emailVerified,
+        photoURL: auth.currentUser.photoURL,
+        uid: auth.currentUser.uid,
+      })
+    );
+  };
+
+  const handleUpdateUserPassword = async (e) => {
+    e.preventDefault();
+    await resetPassword(password);
+    setPassword("");
+    navigate("/sign-in", { replace: true });
+  };
   const handleClickShowNewPassword = () => setShowNewPassword((show) => !show);
-  const handleClickShowConfirmNewPassword = () =>
-    setShowConfirmNewPassword((show) => !show);
+
+  const handleVerification = async () => {
+    await emailVerification();
+    const result = logout();
+    //console.log("çıkış yapıldı", result);
+    // setTimeout(() => {
+    dispatch(logoutHandle());
+    navigate("/sign-in", { replace: true });
+    // }, 1500);
+  };
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -34,6 +83,7 @@ const ProfileUpdate = () => {
         <CssBaseline />
         <Box
           sx={{
+            width: "100%",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -42,21 +92,49 @@ const ProfileUpdate = () => {
           <Box>
             <Avatar
               alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
+              src={
+                user.photoURL ? user.photoURL : "/static/images/avatar/1.jpg"
+              }
               sx={{ width: 256, height: 256 }}
-              //  https://pbs.twimg.com/profile_images/1477573111/asd_400x400.jpg
             >
               <LockOutlinedIcon />
             </Avatar>
+            <Typography
+              component="h1"
+              variant="h5"
+              sx={{ margin: "10px auto" }}
+            >
+              {user.email}
+            </Typography>
+            {!user.emailVerification && (
+              <Button
+                type="text"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={handleVerification}
+              >
+                Email verification
+              </Button>
+            )}
           </Box>
           <Box
             sx={{
+              width: "100%",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
             }}
           >
-            <Box component="form" noValidate sx={{ mt: 3, maxWidth: "75%" }}>
+            <Box
+              component="form"
+              onSubmit={handleUpdateUser}
+              noValidate
+              sx={{
+                mt: 3,
+                width: "100%",
+              }}
+            >
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
@@ -64,23 +142,18 @@ const ProfileUpdate = () => {
                     label="Full Name"
                     variant="standard"
                     fullWidth
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
                     id="standard-basic2"
-                    label="Photo url"
+                    label="Photo URL Address"
                     variant="standard"
                     fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="standard-basic1"
-                    label="Photne Number"
-                    variant="standard"
-                    type="number"
-                    fullWidth
+                    value={photoUrl}
+                    onChange={(e) => setPhotoUrl(e.target.value)}
                   />
                 </Grid>
               </Grid>
@@ -89,38 +162,18 @@ const ProfileUpdate = () => {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={!user.emailVerification}
               >
                 update profile
               </Button>
             </Box>
-            <Box component="form" noValidate sx={{ mt: 3, maxWidth: "75%" }}>
+            <Box
+              component="form"
+              onSubmit={handleUpdateUserPassword}
+              noValidate
+              sx={{ mt: 3, width: "50%" }}
+            >
               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <FormControl variant="standard" fullWidth>
-                    <InputLabel htmlFor="standard-adornment-password">
-                      Old Password
-                    </InputLabel>
-                    <Input
-                      id="oldpassword"
-                      type={showOldPassword ? "text" : "password"}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowOldPassword}
-                            onMouseDown={handleMouseDownPassword}
-                          >
-                            {showOldPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </Grid>
                 <Grid item xs={12}>
                   <FormControl variant="standard" fullWidth>
                     <InputLabel htmlFor="standard-adornment-password">
@@ -128,6 +181,8 @@ const ProfileUpdate = () => {
                     </InputLabel>
                     <Input
                       id="new-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       type={showNewPassword ? "text" : "password"}
                       endAdornment={
                         <InputAdornment position="end">
@@ -147,35 +202,10 @@ const ProfileUpdate = () => {
                     />
                   </FormControl>
                 </Grid>
-                <Grid item xs={12}>
-                  <FormControl variant="standard" fullWidth>
-                    <InputLabel htmlFor="condirm-new-password">
-                      Confirm New Password
-                    </InputLabel>
-                    <Input
-                      id="condirm-new-password"
-                      type={showConfirmNewPassword ? "text" : "password"}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowConfirmNewPassword}
-                            onMouseDown={handleMouseDownPassword}
-                          >
-                            {showConfirmNewPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </Grid>
               </Grid>
               <Button
                 type="submit"
+                disabled={!user.emailVerification}
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}

@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { login, logGoogleUser } from "../../utils/firebase/firebase.utils";
+import {
+  login,
+  logGoogleUser,
+  onUserShateChanged,
+} from "../../utils/firebase/firebase.utils";
+// import { loginAsync, loginWithGooglePopup } from "../../store/auth/authService";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -26,10 +31,11 @@ const SignIn = () => {
       return;
     }
     const user = await login(email, password);
+    // console.log("kullanıcı geldi----!", user);
+    const isUserLogin = onUserShateChanged();
 
-    if (user) {
-      navigate("/profile/update", { replace: true });
-    }
+    console.log(isUserLogin, user);
+    isUserLogin && user && navigate("/profile/update", { replace: true });
   };
 
   const handleSubmitLoginWithGoogle = async () => {

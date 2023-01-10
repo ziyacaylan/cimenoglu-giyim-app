@@ -54,7 +54,7 @@ const ProfileMenuButton = () => {
           user && (
             <Avatar
               alt="Remy Sharp"
-              src="https://miro.medium.com/fit/c/32/32/1*VBr6Fbs-RUycd-OeTsxJIQ.jpeg"
+              src={`${user.photoURL}`}
               sx={{ width: 24, height: 24 }}
             />
           )

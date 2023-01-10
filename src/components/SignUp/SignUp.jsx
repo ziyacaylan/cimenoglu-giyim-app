@@ -10,9 +10,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 
 import { register } from "../../utils/firebase/firebase.utils";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { login as loginHandle } from "../../store/auth/authSlice";
 
 import toast from "react-hot-toast";
 
@@ -20,9 +17,6 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,10 +32,15 @@ const SignUp = () => {
     const user = await register(email, password);
     if (user) {
       // store.dispatch(login(email, password));
-      dispatch(loginHandle(user));
-      navigate("/", { replace: true });
+      // dispatch(loginHandle(user));
+      // navigate("/", { replace: true });
+      toast.success("Registration successful, Please sign in");
+      setEmail("");
+      setPassword("");
+      setRePassword("");
+    } else {
+      toast.error("Registration failed...!");
     }
-    console.log(user);
   };
 
   return (
