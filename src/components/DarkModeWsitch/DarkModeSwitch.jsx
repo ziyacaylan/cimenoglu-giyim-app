@@ -1,30 +1,19 @@
-import { useState } from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
-
-// import { useColorContext } from "../../context/ColorContext";
 
 // form theme
 import { useSelector, useDispatch } from "react-redux";
 import { asyncToggleTheme } from "../../store/theme/themeSlice";
 
 const DarkModeSwitch = () => {
-  // const [checked, setChecked] = useState(false);
-
   const dispatch = useDispatch();
   const darkMode = useSelector((state) => state.theme.darkMode);
 
-  // const { toggleMode } = useColorContext();
-
-  // useEffect(() => {
-  //   darkMode === "light" ? "dark" : "light";
-  // }, [checked]);
-
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
-    width: 62,
-    height: 34,
+    width: 50,
+    height: 25,
     padding: 7,
     "& .MuiSwitch-switchBase": {
       margin: 1,
@@ -47,8 +36,8 @@ const DarkModeSwitch = () => {
     },
     "& .MuiSwitch-thumb": {
       backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#001e3c",
-      width: 32,
-      height: 32,
+      width: 24,
+      height: 24,
       "&:before": {
         content: "''",
         position: "absolute",
@@ -75,7 +64,6 @@ const DarkModeSwitch = () => {
         <FormControlLabel
           control={
             <MaterialUISwitch
-              // sx={{ m: "auto" }}
               defaultChecked={!darkMode}
               onClick={(e) => {
                 dispatch(asyncToggleTheme());

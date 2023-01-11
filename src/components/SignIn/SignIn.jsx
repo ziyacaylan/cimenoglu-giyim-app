@@ -32,10 +32,10 @@ const SignIn = () => {
     }
     const user = await login(email, password);
     // console.log("kullanıcı geldi----!", user);
-    const isUserLogin = onUserShateChanged();
+    user && onUserShateChanged();
 
-    console.log(isUserLogin, user);
-    isUserLogin && user && navigate("/profile/update", { replace: true });
+    // console.log(isUserLogin, user);
+    user && navigate("/profile/update", { replace: true });
   };
 
   const handleSubmitLoginWithGoogle = async () => {
