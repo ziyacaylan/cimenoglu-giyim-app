@@ -179,7 +179,8 @@ export const emailVerification = async () => {
   }
 };
 
-const productsRef = collection(db, "categories");
+const productsRef = collection(db, "products");
+export const categoriesRef = collection(db, "categories");
 
 const docRef = doc(db, "/products/cBTNIAS7bAAP95a0MAsW");
 

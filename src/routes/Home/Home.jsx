@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom";
 import "../../components/CategoryItem/category-item.styles.scss";
 import Directory from "../../components/Directory";
+// import { getCategories } from "../../store/category/categorySlice";
+// import { useDispatch, useSelector } from "react-redux";
 
 function Home() {
   const categories = [
@@ -30,7 +32,12 @@ function Home() {
       imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
     },
   ];
+  //const category = async () => await getCategories();
+  //category();
+  //const dispatch = useDispatch();
 
+  //const categoriler = useSelector((state) => state.categories);
+  //console.log(categoriler);
   return (
     <div>
       <Outlet />
