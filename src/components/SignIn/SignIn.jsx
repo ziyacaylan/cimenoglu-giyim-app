@@ -4,19 +4,16 @@ import {
   logGoogleUser,
   onUserShateChanged,
 } from "../../utils/firebase/firebase.utils";
-// import { loginAsync, loginWithGooglePopup } from "../../store/auth/authService";
 
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import GoogleButton from "react-google-button";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Container } from "@mui/material";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -31,11 +28,8 @@ const SignIn = () => {
       return;
     }
     const user = await login(email, password);
-    // console.log("kullanıcı geldi----!", user);
     user && onUserShateChanged();
-
-    // console.log(isUserLogin, user);
-    user && navigate("/profile/update", { replace: true });
+    //user && navigate("/profile/update", { replace: true });
   };
 
   const handleSubmitLoginWithGoogle = async () => {
@@ -46,20 +40,14 @@ const SignIn = () => {
   };
 
   return (
-    <Box sx={{ width: "350px", margin: "10px" }}>
-      {/* //  maxWidth="xs"> */}
-      <CssBaseline />
+    <Container maxWidth="xs">
       <Box
         sx={{
-          marginTop: 4,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
         <Typography component="h1" variant="h5">
           I already have an account
         </Typography>
@@ -116,7 +104,7 @@ const SignIn = () => {
           </Box>
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 };
 export default SignIn;

@@ -44,7 +44,7 @@ const ProfileMenuButton = () => {
 
   return (
     <div>
-      <Button
+      {/* <Button
         aria-owns={anchorEl ? "simple-menu" : undefined}
         aria-haspopup="true"
         variant="outlined"
@@ -61,7 +61,7 @@ const ProfileMenuButton = () => {
         }
       >
         Profile
-      </Button>
+      </Button> */}
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}

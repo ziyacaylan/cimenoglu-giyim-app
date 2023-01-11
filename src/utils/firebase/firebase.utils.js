@@ -11,7 +11,17 @@ import {
   sendEmailVerification,
   updatePassword,
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  onSnapshot,
+  deleteDoc,
+  addDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 import toast from "react-hot-toast";
 
@@ -40,7 +50,6 @@ provider.setCustomParameters({
   prompt: "select_account",
 });
 export const auth = getAuth();
-
 export const db = getFirestore();
 
 export const createUserDocumentFromAuth = async (userAuth) => {
@@ -168,4 +177,27 @@ export const emailVerification = async () => {
   } catch (error) {
     toast.error(error.message);
   }
+};
+
+const productsRef = collection(db, "categories");
+
+const docRef = doc(db, "/products/cBTNIAS7bAAP95a0MAsW");
+
+// docListener
+export const useProductListener = () => {
+  onSnapshot(productsRef, (snapshot) => {
+    console.log(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+  });
+};
+
+// delete doc
+export const deleteProduct = (id) => {
+  deleteDoc(doc(db, "products", id));
+};
+
+// add doc
+export const addProduct = (product) => {
+  const uid = auth.currentUser?.uid;
+  if (!uid) return;
+  addDoc(productsRef, product);
 };

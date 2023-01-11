@@ -34,7 +34,12 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 import Link from "@mui/material/Link";
+import { useNavigate } from "react-router-dom";
+import { Avatar } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -79,6 +84,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navigation = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -103,8 +109,81 @@ const Navigation = () => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const clickLoginHandle = () => {
+    !user && navigate("/sign-in", { replace: true });
+    //handleMenuClose();
+  };
+  const clickRegisterHandle = () => {
+    !user && navigate("/sign-up", { replace: true });
+    //handleMenuClose();
+  };
+
+  const clickProfileHandle = () => {
+    user && navigate("/profile/update", { replace: true });
+    handleMenuClose();
+  };
+
+  const clickOrdersHandle = () => {
+    user && navigate("/profile/orders", { replace: true });
+    handleMenuClose();
+  };
+  const clickLogoutHandle = () => {
+    user && dispatch(logout());
+    // if (!user) {
+    navigate("/", { replace: true });
+    handleMenuClose();
+    // }
+  };
+
   const menuId = "primary-search-account-menu";
-  const renderMenu = (
+  const renderMenu = user ? (
+    <Menu
+      id="simple-menu"
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleMenuClose}
+      MenuListProps={{ onMouseLeave: handleMenuClose }}
+    >
+      <MenuItem onClick={clickProfileHandle}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "spaceBetween",
+            alignItems: "center",
+          }}
+        >
+          <PersonIcon sx={{ marginRight: "0.625rem", color: "primary.main" }} />
+          <Box sx={{ color: "primary.main" }}>Profile</Box>
+        </Box>
+      </MenuItem>
+      <MenuItem onClick={clickOrdersHandle}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "spaceBetween",
+            alignItems: "center",
+          }}
+        >
+          <ShoppingCartIcon
+            sx={{ marginRight: "0.625rem", color: "primary.main" }}
+          />{" "}
+          <Box sx={{ color: "primary.main" }}>Orders</Box>
+        </Box>
+      </MenuItem>
+      <MenuItem onClick={clickLogoutHandle}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "spaceBetween",
+            alignItems: "center",
+          }}
+        >
+          <LogoutIcon sx={{ marginRight: "0.625rem", color: "primary.main" }} />
+          <Box sx={{ color: "primary.main" }}>Logout</Box>
+        </Box>
+      </MenuItem>
+    </Menu>
+  ) : (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
@@ -120,13 +199,13 @@ const Navigation = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={clickLoginHandle}>
         <AssignmentIndIcon sx={{ color: "primary.main" }} />
         <Typography component="span" marginLeft={1} color="primary.main">
           Sign in
         </Typography>
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={clickRegisterHandle}>
         <PersonAddAltIcon sx={{ color: "primary.main" }} />
         <Typography component="span" marginLeft={1} color="primary.main">
           Register
@@ -193,7 +272,15 @@ const Navigation = () => {
           aria-haspopup="true"
           color="primary.main"
         >
-          <AccountCircle sx={{ color: "primary.main" }} />
+          {user ? (
+            <Avatar
+              alt="Remy Sharp"
+              src={user.photoURL}
+              sx={{ width: 24, height: 24 }}
+            />
+          ) : (
+            <AccountCircle />
+          )}
         </IconButton>
         <Typography component="a" color="primary.main">
           PROFILE
@@ -203,7 +290,7 @@ const Navigation = () => {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, marginBottom: "15px" }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -264,7 +351,15 @@ const Navigation = () => {
               color="inherit"
               sx={{ margin: "0 1rem" }}
             >
-              <AccountCircle />
+              {user ? (
+                <Avatar
+                  alt="Remy Sharp"
+                  src={user.photoURL}
+                  sx={{ width: 24, height: 24 }}
+                />
+              ) : (
+                <AccountCircle />
+              )}
             </IconButton>
             {/* DarkMode switch here */}
             <DarkModeSwitch />

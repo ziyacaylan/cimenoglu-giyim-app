@@ -1,12 +1,11 @@
-import { Fragment } from "react";
+import { Container } from "@mui/material";
 import { Outlet } from "react-router-dom";
-import ProfileUpdate from "../../components/ProfileUpdate/ProfileUpdate";
 
 const Profile = () => {
   return (
-    <>
+    <Container maxWidth="md">
       <Outlet />
-    </>
+    </Container>
   );
 };
 export default Profile;

@@ -7,9 +7,12 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import CssBaseline from "@mui/material/CssBaseline";
 
-import SharedLayout from "./routes/SharedLayout";
+import SharedLayout from "./routes/Layout/SharedLayout";
+import LoginLayout from "./routes/Layout/LoginLayout";
 import Home from "./routes/Home";
-import Login from "./routes/Login";
+import Login from "./routes/Layout/LoginLayout";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
 import Shop from "./routes/Shop";
 import Profile from "./routes/Profile/Profile";
 
@@ -22,12 +25,17 @@ import ProfileUpdate from "./components/ProfileUpdate/ProfileUpdate";
 import Orders from "./components/Orders/Orders";
 import OrderDetails from "./components/OrderDetails/OrderDetails";
 
+import {
+  useProductListener,
+  addProduct,
+} from "./utils/firebase/firebase.utils";
+
 function App() {
   const [mode, setMode] = useState("dark");
   const darkMode = useSelector((state) => state.theme.darkMode);
   const user = useSelector((state) => state.auth.user);
   console.log(user);
-
+  //useProductListener();
   useMemo(() => {
     darkMode ? setMode("light") : setMode("dark");
   }, [darkMode]);
@@ -49,7 +57,16 @@ function App() {
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<Home />} />
             <Route path="/shop" element={<Shop />} />
-            <Route path="/sign-in" element={<Login />} />
+            <Route element={<LoginLayout />}>
+              <Route
+                path="/sign-in"
+                element={!user ? <SignIn /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/sign-up"
+                element={!user ? <SignUp /> : <Navigate to="/" />}
+              />
+            </Route>
             <Route
               path="/profile"
               element={
