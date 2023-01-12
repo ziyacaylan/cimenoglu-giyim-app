@@ -5,8 +5,12 @@ export const productsSlice = createSlice({
   initialState: {
     products: [],
   },
-  reducers: {},
+  reducers: {
+    setProducts: (state, action) => {
+      state.products = action.payload;
+    },
+  },
 });
 
-export const {} = productsSlice.actions;
+export const { setProducts, setFilteredProducts } = productsSlice.actions;
 export default productsSlice.reducer;

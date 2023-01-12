@@ -5,6 +5,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@expo-google-fonts/open-sans-condensed": "^0.2.2",
+    "@fontsource/open-sans-condensed": "^4.5.5",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.10.17",
     "@reduxjs/toolkit": "^1.9.1",

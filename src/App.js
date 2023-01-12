@@ -24,6 +24,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ProfileUpdate from "./components/ProfileUpdate/ProfileUpdate";
 import Orders from "./components/Orders/Orders";
 import OrderDetails from "./components/OrderDetails/OrderDetails";
+import "@fontsource/open-sans-condensed";
 
 import {
   useProductListener,
@@ -34,7 +35,7 @@ function App() {
   const [mode, setMode] = useState("dark");
   const darkMode = useSelector((state) => state.theme.darkMode);
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
+  //console.log(user);
   //useProductListener();
   useMemo(() => {
     darkMode ? setMode("light") : setMode("dark");

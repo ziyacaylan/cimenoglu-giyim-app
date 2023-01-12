@@ -20,6 +20,7 @@ import {
   onSnapshot,
   deleteDoc,
   addDoc,
+  getDocs,
   updateDoc,
 } from "firebase/firestore";
 
@@ -31,7 +32,7 @@ import {
 } from "../../store/auth/authSlice";
 
 import { setCategories as setKategoriler } from "../../store/category/categorySlice";
-
+import { setProducts } from "../../store/products/productsSlice";
 import { store } from "../../store/store";
 
 // Your web app's Firebase configuration
@@ -184,17 +185,34 @@ export const emailVerification = async () => {
 const productsRef = collection(db, "products");
 export const categoriesRef = collection(db, "categories");
 
-const docRef = doc(db, "/products/cBTNIAS7bAAP95a0MAsW");
+// const docRef = doc(db, "/products/cBTNIAS7bAAP95a0MAsW");
 
 // product Listener
-export const useProductListener = async () => {
-  await onSnapshot(productsRef, (snapshot) => {
-    console.log(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-  });
-};
+onSnapshot(productsRef, (snapshot) => {
+  const products = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  store.dispatch(setProducts(products));
+});
+
+// get Products
+// export const getProducts = async () => {
+// const docRef = doc(db, "products", "SF");
+// const docSnap = await getDoc(docRef);
+// if (docSnap.exists()) {
+//   console.log("Document data:", docSnap.data());
+// } else {
+//   // doc.data() will be undefined in this case
+//   console.log("No such document!");
+// }
+//   await getDocs(collection(db, "products")).then((querySnapshot) => {
+//     const newData = querySnapshot.docs.map((doc) => ({
+//       ...doc.data(),
+//       id: doc.id,
+//     }));
+//     store.dispatch(setProducts(newData));
+//   });
+// };
 
 // categories Listener
-//export const useCategoryListener = () => {
 onSnapshot(categoriesRef, (snapshot) => {
   const categories = snapshot.docs.map((doc) => ({
     id: doc.id,
@@ -202,7 +220,6 @@ onSnapshot(categoriesRef, (snapshot) => {
   }));
   store.dispatch(setKategoriler(categories));
 });
-//};
 
 // delete doc
 export const deleteProduct = async (id) => {

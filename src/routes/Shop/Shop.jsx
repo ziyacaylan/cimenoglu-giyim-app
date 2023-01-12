@@ -1,10 +1,16 @@
-import React from "react";
+import { Container } from "@mui/system";
+import { useSelector } from "react-redux";
+import CategoryPreview from "../../components/CategoryPreview";
 
 const Shop = () => {
+  const { categories } = useSelector((state) => state.categories);
+
   return (
-    <div>
-      <h1 style={{ textAlign: "center" }}>Ben mağaza sayfasıyım</h1>
-    </div>
+    <Container maxWidth="xl">
+      {categories.map((category) => (
+        <CategoryPreview category={category.name} key={category.id} />
+      ))}
+    </Container>
   );
 };
 
