@@ -30,6 +30,8 @@ import {
   logout as logoutHandle,
 } from "../../store/auth/authSlice";
 
+import { setCategories as setKategoriler } from "../../store/category/categorySlice";
+
 import { store } from "../../store/store";
 
 // Your web app's Firebase configuration
@@ -184,21 +186,32 @@ export const categoriesRef = collection(db, "categories");
 
 const docRef = doc(db, "/products/cBTNIAS7bAAP95a0MAsW");
 
-// docListener
-export const useProductListener = () => {
-  onSnapshot(productsRef, (snapshot) => {
+// product Listener
+export const useProductListener = async () => {
+  await onSnapshot(productsRef, (snapshot) => {
     console.log(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
   });
 };
 
+// categories Listener
+//export const useCategoryListener = () => {
+onSnapshot(categoriesRef, (snapshot) => {
+  const categories = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+  store.dispatch(setKategoriler(categories));
+});
+//};
+
 // delete doc
-export const deleteProduct = (id) => {
-  deleteDoc(doc(db, "products", id));
+export const deleteProduct = async (id) => {
+  await deleteDoc(doc(db, "products", id));
 };
 
 // add doc
-export const addProduct = (product) => {
+export const addProduct = async (product) => {
   const uid = auth.currentUser?.uid;
   if (!uid) return;
-  addDoc(productsRef, product);
+  await addDoc(productsRef, product);
 };

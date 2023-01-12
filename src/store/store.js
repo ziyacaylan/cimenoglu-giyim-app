@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: {
     auth: userAuthReducer,
     theme: themeReducer,
-    categoies: categorySlice,
+    categories: categorySlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

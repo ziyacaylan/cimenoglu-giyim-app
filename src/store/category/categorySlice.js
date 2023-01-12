@@ -1,16 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { doc, onSnapshot } from "firebase/firestore";
-import { categoriesRef } from "../../utils/firebase/firebase.utils";
-
-export const getCategories = createAsyncThunk(
-  "categories/getCategories",
-  async () => {
-    const result = await onSnapshot(categoriesRef, (snapshot) =>
-      snapshot.docs.map((doc) => doc.data())
-    );
-    return result;
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
 
 export const categorySlice = createSlice({
   name: "categoies",
@@ -19,21 +7,25 @@ export const categorySlice = createSlice({
     isLoading: false,
     error: null,
   },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(getCategories.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getCategories.fulfilled, (state, action) => {
-      state.isLoading = false;
+  reducers: {
+    setCategories: (state, action) => {
       state.categories = action.payload;
-    });
-    builder.addCase(getCategories.rejected, (state, action) => {
-      state.isLoading = true;
-      state.error = action.error.message;
-    });
+    },
   },
+  // extraReducers: (builder) => {
+  //   builder.addCase(getCategories.pending, (state) => {
+  //     state.isLoading = true;
+  //   });
+  //   builder.addCase(getCategories.fulfilled, (state, action) => {
+  //     state.isLoading = false;
+  //     state.categories = action.payload;
+  //   });
+  //   builder.addCase(getCategories.rejected, (state, action) => {
+  //     state.isLoading = true;
+  //     state.error = action.error.message;
+  //   });
+  // },
 });
 
-export const {} = categorySlice.actions;
+export const { setCategories } = categorySlice.actions;
 export default categorySlice.reducer;
