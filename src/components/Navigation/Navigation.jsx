@@ -1,18 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 // import { Link } from "react-router-dom";
 import { ReactComponent as CrwnLogo } from "../../assets/crown.svg";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
 import "./navigation.styles.scss";
 
 import DarkModeSwitch from "../../components/DarkModeWsitch";
-import ShoppingBasket from "../../components/Basket";
 
 import { useSelector } from "react-redux";
 import { logout } from "../../store/auth/authSlice.js";
 import { useDispatch } from "react-redux";
-import toast from "react-hot-toast";
 
 import ProfileMenuButton from "../ProfileMenuButton/ProfileMenuButton";
 
@@ -36,10 +33,10 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
-
 import Link from "@mui/material/Link";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
+import BasketMenu from "./BasketMenu";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -83,11 +80,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navigation = () => {
   const user = useSelector((state) => state.auth.user);
+  const amount = useSelector((state) => state.basket.amount);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [basketAnchorEl, setBasketAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -135,6 +134,22 @@ const Navigation = () => {
     // }
   };
 
+  const handleBasketMenuClose = () => {
+    setBasketAnchorEl(null);
+  };
+  const handleBasketMenuOpen = (event) => {
+    setBasketAnchorEl(event.currentTarget);
+  };
+  // basket menu
+  const basketMenuId = "primary-basket-menu";
+  const renderBasketMenu = (
+    <BasketMenu
+      basketAnchorEl={basketAnchorEl}
+      handleBasketMenuClose={handleBasketMenuClose}
+      basketMenuId={basketMenuId}
+      handleBasketMenuOpen={handleBasketMenuOpen}
+    />
+  );
   const menuId = "primary-search-account-menu";
   const renderMenu = user ? (
     <Menu
@@ -143,6 +158,14 @@ const Navigation = () => {
       open={Boolean(anchorEl)}
       onClose={handleMenuClose}
       MenuListProps={{ onMouseLeave: handleMenuClose }}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "center",
+      }}
     >
       <MenuItem onClick={clickProfileHandle}>
         <Box
@@ -196,7 +219,7 @@ const Navigation = () => {
         vertical: "top",
         horizontal: "right",
       }}
-      open={isMenuOpen}
+      open={Boolean(isMenuOpen)}
       onClose={handleMenuClose}
     >
       <MenuItem onClick={clickLoginHandle}>
@@ -228,36 +251,32 @@ const Navigation = () => {
         vertical: "top",
         horizontal: "right",
       }}
-      open={isMobileMenuOpen}
+      open={Boolean(isMobileMenuOpen)}
       onClose={handleMobileMenuClose}
     >
       {/* shop */}
-      <MenuItem>
-        <Link href="/shop" variant="outlined" underline="none">
-          <IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
-          >
-            <LocalGroceryStoreIcon />
-          </IconButton>
+      <MenuItem onClick={() => navigate("/shop", { replace: true })}>
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+          <LocalGroceryStoreIcon sx={{ color: "primary.main" }} />
+        </IconButton>
+        <Typography component="a" color="primary.main">
           SHOP
-        </Link>
+        </Typography>
       </MenuItem>
       {/* basket */}
-      <MenuItem>
-        <Link href="/" variant="outlined" underline="none">
-          <IconButton
-            size="large"
-            aria-label="show 17 new notifications"
-            color="inherit"
-          >
-            <Badge badgeContent={5} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+      <MenuItem onClick={() => setBasketAnchorEl(!basketAnchorEl)}>
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          sx={{ color: "primary.main" }}
+        >
+          <Badge badgeContent={amount} color="error">
+            <NotificationsIcon color="primary.main" />
+          </Badge>
+        </IconButton>
+        <Typography component="a" color="primary.main">
           BASKET
-        </Link>
+        </Typography>
       </MenuItem>
       {/* dark mode switch */}
       <MenuItem>
@@ -370,12 +389,15 @@ const Navigation = () => {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              aria-controls={basketMenuId}
+              onClick={handleBasketMenuOpen}
             >
-              <Badge badgeContent={5} color="error">
+              <Badge badgeContent={amount} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
           </Box>
+
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -392,6 +414,7 @@ const Navigation = () => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderBasketMenu}
     </Box>
   );
   //console.log("navigation yazdırıyor...", user);

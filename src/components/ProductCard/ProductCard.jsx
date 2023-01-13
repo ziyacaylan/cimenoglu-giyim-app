@@ -6,8 +6,18 @@ import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import "./ProductCard.styles.scss";
+import { addProduct, increase } from "../../store/basket/basketSlice";
+import { useDispatch } from "react-redux";
 
 const ProductCard = ({ filteredProducts }) => {
+  const dispatch = useDispatch();
+
+  const handleClick = (product) => {
+    //console.log(product);
+    dispatch(addProduct({ ...product }));
+    //dispatch(increase(product.id));
+  };
+
   return (
     <>
       {filteredProducts.map((product) => (
@@ -47,6 +57,7 @@ const ProductCard = ({ filteredProducts }) => {
                 }}
                 variant="contained"
                 startIcon={<ShoppingCartIcon />}
+                onClick={() => handleClick(product)}
               >
                 Add to card
               </Button>

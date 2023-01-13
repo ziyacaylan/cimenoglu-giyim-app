@@ -4,7 +4,7 @@ import { Container } from "@mui/system";
 import "./directory.styles.scss";
 
 const Directory = ({ categories }) => {
-  console.log(categories);
+  //console.log(categories);
   return (
     <Container
       maxWidth="xl"

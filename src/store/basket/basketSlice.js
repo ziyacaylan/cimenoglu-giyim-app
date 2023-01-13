@@ -5,12 +5,30 @@ export const categorySlice = createSlice({
   initialState: {
     basket: [],
     total: 0,
+    amount: 0,
     isLoading: false,
     error: null,
   },
   reducers: {
-    addProduct: (state, action) => {
-      state.basket.push(action.payload);
+    addProduct: (state, { payload }) => {
+      const product_id = payload.id;
+      const isAddProduct = state.basket.some((item) => item.id === product_id);
+
+      if (isAddProduct) {
+        console.log("ürün ekli işte");
+        //ürün ekli arttır
+        const index = state.basket.findIndex((object) => {
+          return object.id === product_id;
+        });
+        console.log(index);
+        state.basket[index].amount += 1;
+        state.amount += 1;
+      } else {
+        //ekle
+        state.basket = [...state.basket, { ...payload, amount: 1 }];
+        state.amount += 1;
+      }
+      console.log(state.basket);
     },
     clearBasket: (state, action) => {
       state.basket = [];
@@ -19,7 +37,7 @@ export const categorySlice = createSlice({
       const id = action.payload;
       state.basket = state.basket.filter((product) => product.id !== id);
     },
-    incrrease: (state, { payload }) => {
+    increase: (state, { payload }) => {
       const product = state.basket.find((product) => product.id === payload.id);
       product.amount = product.amount + 1;
     },
@@ -44,7 +62,7 @@ export const {
   addProduct,
   clearBasket,
   removeProduct,
-  incrrease,
+  increase,
   decrease,
   calculateTotals,
 } = categorySlice.actions;
