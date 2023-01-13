@@ -23,7 +23,7 @@ const CategoryPreview = ({ category }) => {
           sx={{
             display: "flex",
             flexWrap: "wrap",
-            justifyContent: "center",
+            justifyContent: "space-around",
             alignItems: "center",
           }}
         >
