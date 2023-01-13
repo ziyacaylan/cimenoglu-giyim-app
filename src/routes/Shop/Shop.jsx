@@ -6,9 +6,9 @@ const Shop = () => {
 
   return (
     <>
-      {categories.map((category) => (
+      {/* {categories.map((category) => (
         <CategoryPreview category={category.name} key={category.id} />
-      ))}
+      ))} */}
     </>
   );
 };
