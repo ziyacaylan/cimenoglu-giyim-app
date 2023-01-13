@@ -1,16 +1,11 @@
-import { Box } from "@mui/material";
-import { useSelector } from "react-redux";
-import CategoryPreview from "../../components/CategoryPreview";
+import Categories from "../../components/Categories/Categories";
+import { Outlet } from "react-router-dom";
 
 const Shop = () => {
-  const { categories } = useSelector((state) => state.categories);
-
   return (
-    <Box>
-      {categories.map((category) => (
-        <CategoryPreview category={category.name} key={category.id} />
-      ))}
-    </Box>
+    <>
+      <Outlet />
+    </>
   );
 };
 

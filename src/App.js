@@ -25,16 +25,16 @@ import ProfileUpdate from "./components/ProfileUpdate/ProfileUpdate";
 import Orders from "./components/Orders/Orders";
 import OrderDetails from "./components/OrderDetails/OrderDetails";
 import "@fontsource/open-sans-condensed";
-
-import {
-  useProductListener,
-  addProduct,
-} from "./utils/firebase/firebase.utils";
+import CategoryPreview from "./components/CategoryPreview";
+import Categories from "./components/Categories/Categories";
 
 function App() {
   const [mode, setMode] = useState("dark");
   const darkMode = useSelector((state) => state.theme.darkMode);
   const user = useSelector((state) => state.auth.user);
+  const correntCategory = useSelector(
+    (state) => state.categories.currentCategory
+  );
   //console.log(user);
   //useProductListener();
   useMemo(() => {
@@ -48,7 +48,7 @@ function App() {
   const RequireAuth = ({ children }) => {
     return currentUser ? children : <Navigate to="/sign-in" />;
   };
-
+  console.log(correntCategory);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -57,7 +57,14 @@ function App() {
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
+            <Route path="shop/*" element={<Shop />}>
+              <Route element={<Categories />} index />
+              <Route
+                path={`:${correntCategory}`}
+                element={<CategoryPreview category={correntCategory} />}
+              />
+            </Route>
+
             <Route element={<LoginLayout />}>
               <Route
                 path="/sign-in"
