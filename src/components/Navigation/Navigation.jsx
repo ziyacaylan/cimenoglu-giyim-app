@@ -299,8 +299,9 @@ const Navigation = () => {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 1 }}
+            onClick={() => navigate("/", { replace: true })}
           >
-            <Link href="/">
+            <Link>
               <CrwnLogo className="logo" />
             </Link>
           </IconButton>
@@ -327,16 +328,17 @@ const Navigation = () => {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {/* shop */}
             <Box display="flex" alignItems="center" justifyContent="center">
-              <Link href="/shop" underline="none">
-                <Button
-                  sx={{ display: "block", color: "white" }}
-                  variant="outlined"
-                  component="label"
-                  aria-controls={menuId}
-                >
-                  shop
-                </Button>
-              </Link>
+              {/* <Link href="#" underline="none"> */}
+              <Button
+                sx={{ display: "block", color: "white" }}
+                variant="outlined"
+                component="label"
+                aria-controls={menuId}
+                onClick={() => navigate("/shop", { replace: true })}
+              >
+                shop
+              </Button>
+              {/* </Link> */}
             </Box>
             {/* user  */}
             <IconButton
