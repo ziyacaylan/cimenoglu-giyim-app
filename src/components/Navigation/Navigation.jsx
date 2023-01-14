@@ -347,7 +347,6 @@ const Navigation = () => {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {/* shop */}
             <Box display="flex" alignItems="center" justifyContent="center">
-              {/* <Link href="#" underline="none"> */}
               <Button
                 sx={{ display: "block", color: "white" }}
                 variant="outlined"
@@ -357,7 +356,6 @@ const Navigation = () => {
               >
                 shop
               </Button>
-              {/* </Link> */}
             </Box>
             {/* user  */}
             <IconButton

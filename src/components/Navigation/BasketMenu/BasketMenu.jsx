@@ -1,8 +1,13 @@
 import React from "react";
 import MenuItem from "@mui/material/MenuItem";
-import { Button } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import Fade from "@mui/material/Fade";
+import Box from "@mui/material/Box";
+import { Avatar } from "@mui/material";
+import Typography from "@mui/material/Typography";
+
+import { useSelector } from "react-redux";
 
 const BasketMenu = ({
   basketAnchorEl,
@@ -10,6 +15,8 @@ const BasketMenu = ({
   basketMenuId,
   handleBasketMenuOpen,
 }) => {
+  const basket = useSelector((state) => state.basket.basket);
+  console.log(basket);
   return (
     <>
       <Menu
@@ -17,9 +24,6 @@ const BasketMenu = ({
         anchorEl={basketAnchorEl}
         open={Boolean(basketAnchorEl)}
         onClose={handleBasketMenuClose}
-        // MenuListProps={{
-        //   "aria-labelledby": "primary-basket-menu",
-        // }}
         keepMounted
         anchorOrigin={{
           vertical: "top",
@@ -30,14 +34,72 @@ const BasketMenu = ({
           horizontal: "right",
         }}
         TransitionComponent={Fade}
+        // sx={{ maxWidth: "250px" }}
       >
-        <MenuItem>Ürün 1</MenuItem>
-        <MenuItem>Ürün 2</MenuItem>
-        <MenuItem>Ürün 3</MenuItem>
-        <MenuItem>Ürün 4</MenuItem>
-        <MenuItem>Ürün 5</MenuItem>
+        {basket.map((product) => (
+          <MenuItem key={product.id}>
+            <Box
+              sx={{
+                maxWidth: 240,
+                display: "flex",
+                // flexWrap: "wrap",
+                justifyontent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Avatar alt="product" src={product.imageUrl} variant="square" />
+
+              <Box
+                ml={2}
+                // textAlign="end"
+                sx={{
+                  width: "180px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                  flexGrow: 1,
+                }}
+              >
+                <Typography component="a" color="primary.main">
+                  {product.name}
+                </Typography>
+                <Box>
+                  <Typography
+                    component="a"
+                    color="primary.main"
+                    sx={{ fontWeight: "bold" }}
+                  >
+                    {` ${product.amount} `}
+                  </Typography>
+                  <Typography
+                    component="a"
+                    color="primary.main"
+                    sx={{ fontWeight: "bold" }}
+                  >
+                    {` x `}
+                  </Typography>
+                  <Typography
+                    component="a"
+                    color="primary.main"
+                    sx={{ fontWeight: "bold" }}
+                  >
+                    {` $${product.price}`}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </MenuItem>
+        ))}
+
+        <Divider sx={{ borderColor: "primary.main" }} />
         <MenuItem>
-          <Button>Shop Now</Button>
+          <Button
+            variant="contained"
+            sx={{ bgColor: "primary.main", width: "100%" }}
+          >
+            checkout
+          </Button>
         </MenuItem>
       </Menu>
     </>
