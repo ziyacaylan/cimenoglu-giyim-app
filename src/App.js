@@ -16,7 +16,7 @@ import SignUp from "./components/SignUp";
 import Shop from "./routes/Shop";
 import Profile from "./routes/Profile/Profile";
 
-import { Toaster } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 
 //theme
 import { getDesignTokens } from "./theme/theme";
@@ -27,6 +27,7 @@ import OrderDetails from "./components/OrderDetails/OrderDetails";
 import "@fontsource/open-sans-condensed";
 import CategoryPreview from "./components/CategoryPreview";
 import Categories from "./components/Categories/Categories";
+import Checkout from "./routes/Checkout/Checkout";
 
 function App() {
   const [mode, setMode] = useState("dark");
@@ -64,6 +65,10 @@ function App() {
                 element={<CategoryPreview category={correntCategory} />}
               />
             </Route>
+            <Route
+              path="/checkout"
+              element={user ? <Checkout /> : <Navigate to="/" />}
+            />
 
             <Route element={<LoginLayout />}>
               <Route
