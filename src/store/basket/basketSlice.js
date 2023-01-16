@@ -43,7 +43,7 @@ export const categorySlice = createSlice({
     },
     decrease: (state, { payload }) => {
       const product = state.basket.find((product) => product.id === payload.id);
-      product.amount = product.amount - 1;
+      product.amount = product.amount > 1 ? product.amount - 1 : product.amount;
     },
     calculateTotals: (state) => {
       let amount = 0;

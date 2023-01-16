@@ -8,6 +8,7 @@ import { Avatar } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const BasketMenu = ({
   basketAnchorEl,
@@ -16,10 +17,12 @@ const BasketMenu = ({
   handleBasketMenuOpen,
 }) => {
   const basket = useSelector((state) => state.basket.basket);
+  const navigate = useNavigate();
   // console.log(basket);
 
   const handleCheckout = () => {
-    //buraya sepeti ekle
+    navigate("/checkout", { replace: true });
+    handleBasketMenuClose();
   };
   return (
     <>
