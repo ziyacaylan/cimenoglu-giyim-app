@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -19,8 +19,10 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button } from "@mui/material";
 
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+
+import { getOrders } from "../../utils/firebase/firebase.utils";
 
 function createData(id, orderDate, orderSummary, amount, orderDetails) {
   return { id, orderDate, orderSummary, amount, orderDetails };
@@ -37,6 +39,15 @@ const Orders = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
+
+  const getOrdersfromFirebase = async () => {
+    const data = await getOrders();
+    return data;
+  };
+  useEffect(() => {
+    const data = getOrdersfromFirebase();
+    console.log(data);
+  }, []);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -92,13 +103,19 @@ const Orders = () => {
                 key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" key={row.name}>
                   {row.id}
                 </TableCell>
-                <TableCell align="left">{row.orderDate}</TableCell>
-                <TableCell align="right">{row.orderSummary}</TableCell>
-                <TableCell align="right">{row.amount}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left" key={row.name}>
+                  {row.orderDate}
+                </TableCell>
+                <TableCell align="right" key={row.name}>
+                  {row.orderSummary}
+                </TableCell>
+                <TableCell align="right" key={row.name}>
+                  {row.amount}
+                </TableCell>
+                <TableCell align="right" key={row.name}>
                   <Button variant="outlined" onClick={clickHandleDetails}>
                     order details
                   </Button>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
@@ -15,6 +15,10 @@ import { useSelector } from "react-redux";
 import image from "../../assets/crown.svg";
 import { Divider } from "@mui/material";
 import { countries } from "../../utils/Country/country";
+import { toast } from "react-hot-toast";
+import { nanoid } from "@reduxjs/toolkit";
+
+import { addDataToFirestore } from "../../utils/firebase/firebase.utils";
 
 const style = {
   position: "absolute",
@@ -29,14 +33,45 @@ const style = {
 };
 
 const CheckoutModal = ({ handleOpen, handleClose, open }) => {
-  const { total } = useSelector((state) => state.basket);
+  const { basket, total, amount } = useSelector((state) => state.basket);
   const user = useSelector((state) => state.auth.user);
-  const [age, setAge] = React.useState("");
+  const [country, setCountry] = useState("");
+  const [email, setEmail] = useState(user.email);
+  const [fullName, setFullName] = useState(user.displayName);
+  const [address, setAddress] = useState("");
+  const [postCode, setPostCode] = useState("");
+  const [city, setCity] = useState("");
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const handleChangeCountry = (event) => {
+    event.preventDefault();
+    setCountry(event.target.value);
   };
-  console.log(user);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const order = {
+      orderId: nanoid(),
+      date: new Date(),
+      orderSummary: "Order Completed",
+      uid: user?.uid,
+      email,
+      fullName,
+      address,
+      postCode,
+      city,
+      country,
+      basket,
+      total,
+      amount,
+    };
+    const data = await addDataToFirestore(order, "orders");
+    if (data) {
+      toast.success("Order Completed...!");
+      handleClose();
+    } else {
+      toast.error(data.error.message);
+    }
+  };
+  //console.log(user);
   return (
     <>
       <Modal
@@ -100,40 +135,62 @@ const CheckoutModal = ({ handleOpen, handleClose, open }) => {
           <Divider sx={{ borderColor: "primary.main" }} />
 
           {/* ************************** Form Start *********************************** */}
-          <Box component="form" sx={{ width: "100%", mt: "15px" }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ width: "100%", mt: "15px" }}
+          >
             <FormGroup>
-              <Box sx={{ display: "flex", alignItems: "flex-end", mb: "20px" }}>
-                <MailOutlineIcon
-                  sx={{ color: "action.active", mr: 1, my: 0.5 }}
-                />
-                <TextField
-                  id="email"
-                  label="Email"
-                  variant="standard"
-                  fullWidth
-                  mt="10px"
-                  value={user ? user.email : ""}
-                />
-              </Box>
+              <FormControl>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    mb: "20px",
+                  }}
+                >
+                  <MailOutlineIcon
+                    sx={{ color: "action.active", mr: 1, my: 0.5 }}
+                  />
+                  <TextField
+                    id="email"
+                    name="email"
+                    label="Email"
+                    required
+                    variant="standard"
+                    fullWidth
+                    mt="10px"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Box>
+              </FormControl>
             </FormGroup>
             <FormGroup>
               <TextField
                 id="fullName"
+                name="fullName"
+                required
                 label="Full Name"
                 variant="filled"
                 fullWidth
                 mt="10px"
-                value={user ? user.displayName : ""}
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
               />
             </FormGroup>
             {/* Address */}
             <FormGroup>
               <TextField
                 id="address"
+                name="address"
+                required
                 label="Address"
                 variant="filled"
                 fullWidth
                 mt="10px"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
             </FormGroup>
             {/* PostCode & City */}
@@ -142,46 +199,61 @@ const CheckoutModal = ({ handleOpen, handleClose, open }) => {
               <FormGroup>
                 <TextField
                   id="postCode"
+                  name="postCode"
+                  required
                   label="PostCode"
                   type="number"
                   variant="filled"
                   fullWidth
                   mt="10px"
+                  value={postCode}
+                  onChange={(e) => setPostCode(e.target.value)}
                 />
               </FormGroup>
               {/* City */}
               <FormGroup>
                 <TextField
                   id="city"
+                  name="city"
+                  required
                   label="City"
                   variant="filled"
                   fullWidth
                   mt="10px"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
                 />
               </FormGroup>
             </Box>
             <FormGroup>
               <FormControl variant="filled" sx={{ minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-filled-label">
-                  Country
-                </InputLabel>
+                <InputLabel id="country">Country</InputLabel>
                 <Select
-                  labelId="demo-simple-select-filled-label"
-                  id="demo-simple-select-filled"
-                  value={age}
-                  onChange={handleChange}
+                  labelId="country"
+                  id="country"
+                  name="country"
+                  required
+                  value={country}
+                  onChange={handleChangeCountry}
                 >
-                  <MenuItem value="">
+                  {/* <MenuItem value="" key={0}>
                     <em>None</em>
-                  </MenuItem>
+                  </MenuItem> */}
                   {countries.map((country) => (
-                    <MenuItem value={country.label}>{country.label}</MenuItem>
+                    <MenuItem value={country.label} key={countries.phone}>
+                      {country.label}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </FormGroup>
-            <Button variant="contained" fullWidth sx={{ mt: "10px" }}>
-              {`Pay Now    ${total} $`}
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{ mt: "10px" }}
+              type="submit"
+            >
+              {`Pay Now  ${total} $`}
             </Button>
           </Box>
         </Box>

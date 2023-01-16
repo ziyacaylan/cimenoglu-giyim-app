@@ -17,6 +17,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import Divider from "@mui/material/Divider";
+import PaymentIcon from "@mui/icons-material/Payment";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -26,6 +27,7 @@ import {
   calculateTotals,
 } from "../../store/basket/basketSlice";
 import CheckoutModal from "../../components/CheckoutModal/CheckoutModal";
+import { toast } from "react-hot-toast";
 
 export const Checkout = () => {
   const basket = useSelector((state) => state.basket.basket);
@@ -39,10 +41,11 @@ export const Checkout = () => {
     dispatch(calculateTotals());
   }, [basket]);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () =>
+    basket.length > 0 ? setOpen(true) : toast.error("Basket is empty");
   const handleClose = () => setOpen(false);
 
-  console.log(basket);
+  //console.log(basket);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -211,6 +214,7 @@ export const Checkout = () => {
                       sx={{ marginTop: "10px" }}
                       onClick={handleOpen}
                       fullWidth
+                      startIcon={<PaymentIcon />}
                     >
                       pay now
                     </Button>
