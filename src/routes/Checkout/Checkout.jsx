@@ -5,6 +5,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
+import React from "react";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
@@ -63,61 +64,62 @@ export const Checkout = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {basket.map((product) => (
-                  <TableRow
-                    key={product.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      <CardMedia
-                        component="img"
-                        height="194"
-                        image={product.imageUrl}
-                        alt="Paella dish"
-                      />
-                    </TableCell>
-                    <TableCell align="right">{product.name}</TableCell>
-                    <TableCell align="right">
-                      <ButtonGroup>
+                {React.Children.toArray(
+                  basket.map((product) => (
+                    <TableRow
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        <CardMedia
+                          component="img"
+                          height="194"
+                          image={product.imageUrl}
+                          alt="Paella dish"
+                        />
+                      </TableCell>
+                      <TableCell align="right">{product.name}</TableCell>
+                      <TableCell align="right">
+                        <ButtonGroup>
+                          <Button
+                            aria-label="reduce"
+                            onClick={() => dispatch(decrease(product))}
+                          >
+                            <RemoveIcon fontSize="small" />
+                          </Button>
+                          <Paper
+                            variant="outlined"
+                            sx={{
+                              borderColor: "primary.main",
+                              width: "50px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                            square
+                          >
+                            {product.amount}
+                          </Paper>
+                          <Button
+                            aria-label="increase"
+                            onClick={() => dispatch(increase(product))}
+                          >
+                            <AddIcon fontSize="small" />
+                          </Button>
+                        </ButtonGroup>
+                      </TableCell>
+                      <TableCell align="right">{`$ ${product.price}`}</TableCell>
+                      <TableCell align="right">
                         <Button
-                          aria-label="reduce"
-                          onClick={() => dispatch(decrease(product))}
+                          variant="contained"
+                          color="error"
+                          onClick={() => dispatch(removeProduct(product.id))}
                         >
-                          <RemoveIcon fontSize="small" />
+                          <ClearIcon />
                         </Button>
-                        <Paper
-                          variant="outlined"
-                          sx={{
-                            borderColor: "primary.main",
-                            width: "50px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                          square
-                        >
-                          {product.amount}
-                        </Paper>
-                        <Button
-                          aria-label="increase"
-                          onClick={() => dispatch(increase(product))}
-                        >
-                          <AddIcon fontSize="small" />
-                        </Button>
-                      </ButtonGroup>
-                    </TableCell>
-                    <TableCell align="right">{`$ ${product.price}`}</TableCell>
-                    <TableCell align="right">
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => dispatch(removeProduct(product.id))}
-                      >
-                        <ClearIcon />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>

@@ -11,7 +11,7 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import image from "../../assets/crown.svg";
 import { Divider } from "@mui/material";
 import { countries } from "../../utils/Country/country";
@@ -19,6 +19,7 @@ import { toast } from "react-hot-toast";
 import { nanoid } from "@reduxjs/toolkit";
 
 import { addDataToFirestore } from "../../utils/firebase/firebase.utils";
+import { clearBasket } from "../../store/basket/basketSlice";
 
 const style = {
   position: "absolute",
@@ -35,6 +36,7 @@ const style = {
 const CheckoutModal = ({ handleOpen, handleClose, open }) => {
   const { basket, total, amount } = useSelector((state) => state.basket);
   const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   const [country, setCountry] = useState("");
   const [email, setEmail] = useState(user.email);
   const [fullName, setFullName] = useState(user.displayName);
@@ -66,6 +68,7 @@ const CheckoutModal = ({ handleOpen, handleClose, open }) => {
     const data = await addDataToFirestore(order, "orders");
     if (data) {
       toast.success("Order Completed...!");
+      dispatch(clearBasket());
       handleClose();
     } else {
       toast.error(data.error.message);

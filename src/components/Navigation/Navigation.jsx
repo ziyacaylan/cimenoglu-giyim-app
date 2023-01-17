@@ -37,6 +37,7 @@ import Link from "@mui/material/Link";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import BasketMenu from "./BasketMenu";
+import { toast } from "react-hot-toast";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -138,7 +139,11 @@ const Navigation = () => {
     setBasketAnchorEl(null);
   };
   const handleBasketMenuOpen = (event) => {
-    setBasketAnchorEl(event.currentTarget);
+    if (amount === 0) {
+      toast.error("Basket is empty");
+    } else {
+      setBasketAnchorEl(event.currentTarget);
+    }
   };
   // basket menu
   const basketMenuId = "primary-basket-menu";
@@ -385,7 +390,7 @@ const Navigation = () => {
             {/* Basket */}
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
+              aria-label="basket_menu"
               color="inherit"
               aria-controls={basketMenuId}
               onClick={handleBasketMenuOpen}

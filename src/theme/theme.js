@@ -9,14 +9,14 @@ export const getDesignTokens = (mode) => ({
           primary: {
             main: "#0277bd",
           },
-          divider: "#fde68a",
+          divider: "#1A120B",
           background: {
             default: "#eeeeee",
             paper: "#eceff1",
           },
           text: {
             primary: "#212121",
-            secondary: "#27272a",
+            secondary: "#71717a",
           },
         }
       : {
@@ -24,7 +24,7 @@ export const getDesignTokens = (mode) => ({
           primary: {
             main: "#e65100",
           },
-          divider: "#004282",
+          divider: "#fafafa",
           background: {
             default: "#000e21",
             paper: "#000e21",

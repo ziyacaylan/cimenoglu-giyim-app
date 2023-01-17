@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -22,36 +22,26 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { getOrders } from "../../utils/firebase/firebase.utils";
-
-function createData(id, orderDate, orderSummary, amount, orderDetails) {
-  return { id, orderDate, orderSummary, amount, orderDetails };
-}
-
-const rows = [
-  createData(1, "Frozen yoghurt", 159, 6.0),
-  createData(2, "Ice cream sandwich", 237, 9.0),
-  createData(3, "Eclair", 262, 16.0),
-];
+import { getDocumentFromFirestore } from "../../utils/firebase/firebase.utils";
 
 const Orders = () => {
   const [page, setPage] = useState(0);
+  const [orders, setOrders] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const navigate = useNavigate();
+
   const user = useSelector((state) => state.auth.user);
 
-  const getOrdersfromFirebase = async () => {
-    const data = await getOrders();
-    return data;
-  };
   useEffect(() => {
-    const data = getOrdersfromFirebase();
-    console.log(data);
+    (async () => {
+      const data = await getDocumentFromFirestore("orders", user.uid);
+      console.log(data);
+      setOrders(data);
+    })();
   }, []);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -59,7 +49,6 @@ const Orders = () => {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   TablePaginationActions.propTypes = {
@@ -69,14 +58,14 @@ const Orders = () => {
     rowsPerPage: PropTypes.number.isRequired,
   };
 
-  const clickHandleDetails = () => {
+  const clickHandleDetails = (order) => {
     if (user) {
-      navigate("/profile/orders/order-details", { replace: true });
+      navigate("/profile/orders/order-details", { state: { order } });
     }
   };
 
   return (
-    <Container>
+    <>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -95,40 +84,43 @@ const Orders = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" key={row.name}>
-                  {row.id}
-                </TableCell>
-                <TableCell align="left" key={row.name}>
-                  {row.orderDate}
-                </TableCell>
-                <TableCell align="right" key={row.name}>
-                  {row.orderSummary}
-                </TableCell>
-                <TableCell align="right" key={row.name}>
-                  {row.amount}
-                </TableCell>
-                <TableCell align="right" key={row.name}>
-                  <Button variant="outlined" onClick={clickHandleDetails}>
-                    order details
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {React.Children.toArray(
+              (rowsPerPage > 0
+                ? orders.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : orders
+              ).map((order, index) => (
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="left">
+                    {order.date.toDate().toDateString()}
+                  </TableCell>
+                  <TableCell align="right">{order.orderSummary}</TableCell>
+                  <TableCell align="right">{order.amount}</TableCell>
+                  <TableCell align="right">
+                    <Button
+                      variant="outlined"
+                      onClick={() => clickHandleDetails(order)}
+                    >
+                      order details
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={rows.length}
+                count={orders.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{
@@ -145,7 +137,7 @@ const Orders = () => {
           </TableFooter>
         </Table>
       </TableContainer>
-    </Container>
+    </>
   );
 };
 

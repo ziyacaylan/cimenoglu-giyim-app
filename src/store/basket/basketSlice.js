@@ -32,6 +32,8 @@ export const categorySlice = createSlice({
     },
     clearBasket: (state, action) => {
       state.basket = [];
+      state.amount = 0;
+      state.total = 0;
     },
     removeProduct: (state, action) => {
       const id = action.payload;

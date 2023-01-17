@@ -22,6 +22,9 @@ import {
   addDoc,
   getDocs,
   updateDoc,
+  query,
+  where,
+  orderBy,
 } from "firebase/firestore";
 
 import toast from "react-hot-toast";
@@ -238,4 +241,19 @@ export const addDataToFirestore = async (product, tableName) => {
   if (!uid) return;
   const result = await addDoc(collection(db, tableName), product);
   return result;
+};
+
+// get document
+export const getDocumentFromFirestore = async (table, userId) => {
+  const q = query(
+    collection(db, "orders"),
+    where("uid", "==", userId),
+    orderBy("date", "desc")
+  );
+  const querySnapshot = await getDocs(q);
+  const myOrders = [];
+  querySnapshot.forEach((doc) => {
+    myOrders.push(doc.data());
+  });
+  return myOrders;
 };
