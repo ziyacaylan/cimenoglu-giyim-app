@@ -8,7 +8,7 @@ const SharedLayout = () => {
   return (
     <Fragment>
       <Navigation />
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{ minHeight: "63vh" }}>
         <Outlet />
       </Container>
       <Footer />

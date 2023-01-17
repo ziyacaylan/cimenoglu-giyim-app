@@ -26,6 +26,7 @@ const Directory = ({ categories }) => {
             textAlign: "center",
             fontFamily: "Saira Extra Condensed",
             mb: 0,
+            mt: 2,
           }}
         >
           Cimenoglu Wear
@@ -36,6 +37,7 @@ const Directory = ({ categories }) => {
           sx={{
             fontFamily: "Saira Extra Condensed",
             mt: 0,
+            mb: 2,
             px: 1,
             backgroundColor: "divider",
             color: "primary.main",

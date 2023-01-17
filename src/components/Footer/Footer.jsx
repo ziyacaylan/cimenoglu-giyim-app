@@ -25,11 +25,7 @@ const Footer = () => {
         backgroundColor: "footer",
         paddingTop: "1rem",
         paddingBottom: "1rem",
-        position: "fixed",
         fontFamily: "Saira Extra Condensed",
-        bottom: 0,
-        left: 0,
-        zIndex: 10,
       }}
     >
       <Container maxWidth="lg">
@@ -87,6 +83,10 @@ const Footer = () => {
                   color: "footerTextColor !important",
                 }}
                 startIcon={<LinkedInIcon />}
+                onClick={() =>
+                  (window.location.href =
+                    "https://www.linkedin.com/in/ziya-caylan")
+                }
               >
                 Linkedin
               </Button>
@@ -100,6 +100,9 @@ const Footer = () => {
                   color: "footerTextColor !important",
                 }}
                 startIcon={<GitHubIcon />}
+                onClick={() =>
+                  (window.location.href = "https://github.com/ziyacaylan")
+                }
               >
                 GitHub
               </Button>
@@ -143,6 +146,10 @@ const Footer = () => {
                   color: "footerTextColor !important",
                 }}
                 startIcon={<AccountCircleIcon />}
+                onClick={() =>
+                  (window.location.href =
+                    "https://ziya-caylan-portfolio.netlify.app")
+                }
               >
                 Portfolıo
               </Button>

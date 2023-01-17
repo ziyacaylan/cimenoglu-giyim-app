@@ -33,7 +33,7 @@ const OrderDetails = () => {
 
   //console.log(myOrder);
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, minHeight: "63vh" }}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <TableContainer component={Paper}>

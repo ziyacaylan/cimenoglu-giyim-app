@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -80,13 +79,13 @@ const ProfileUpdate = () => {
   return (
     <Container>
       <Box>
-        <CssBaseline />
         <Box
           sx={{
             width: "100%",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            mb: 5,
           }}
         >
           <Box>

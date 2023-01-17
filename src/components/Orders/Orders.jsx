@@ -65,7 +65,7 @@ const Orders = () => {
   };
 
   return (
-    <>
+    <Box sx={{ minHeight: "63vh" }}>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -137,7 +137,7 @@ const Orders = () => {
           </TableFooter>
         </Table>
       </TableContainer>
-    </>
+    </Box>
   );
 };
 
