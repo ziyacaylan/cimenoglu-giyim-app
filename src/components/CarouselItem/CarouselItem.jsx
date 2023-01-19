@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
 
-const handleDragStart = (e) => e.preventDefault();
-
 const CarouselItem = () => {
-  const { categories } = useSelector((state) => state.categories);
+  //const { categories } = useSelector((state) => state.categories);
   const [index, setIndex] = useState(0);
 
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
   };
-  console.log(categories);
+  //console.log(categories);
   return (
     <>
       <Carousel

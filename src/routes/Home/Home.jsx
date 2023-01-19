@@ -1,7 +1,8 @@
 import { Outlet } from "react-router-dom";
-import "../../components/CategoryItem/category-item.styles.scss";
+import "react-multi-carousel/lib/styles.css";
 import Directory from "../../components/Directory";
 import CarouselItem from "../../components/CarouselItem";
+import CarouselCards from "../../components/CarouselCards/CarouselCards";
 import { useSelector } from "react-redux";
 
 function Home() {
@@ -12,6 +13,7 @@ function Home() {
       <Outlet />
       <CarouselItem />
       <Directory categories={categories} />
+      <CarouselCards />
     </div>
   );
 }
