@@ -30,7 +30,7 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container direction="column" alignItems="center">
-          <Grid container xs={12} mb={3}>
+          <Grid container>
             <Grid
               item
               xs={12}
