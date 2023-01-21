@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import "./ProductCard.styles.scss";
-import { addProduct, increase } from "../../store/basket/basketSlice";
+import { addProduct } from "../../store/basket/basketSlice";
 import { useDispatch } from "react-redux";
 
 const ProductCard = ({ filteredProducts }) => {
