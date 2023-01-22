@@ -28,6 +28,7 @@ import "@fontsource/open-sans-condensed";
 import CategoryPreview from "./components/CategoryPreview";
 import Categories from "./components/Categories/Categories";
 import Checkout from "./routes/Checkout/Checkout";
+import Search from "./routes/Search";
 
 function App() {
   const [mode, setMode] = useState("dark");
@@ -58,6 +59,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<Home />} />
+            <Route path="/search" element={<Search />} />
             <Route path="shop/*" element={<Shop />}>
               <Route element={<Categories />} index />
               <Route

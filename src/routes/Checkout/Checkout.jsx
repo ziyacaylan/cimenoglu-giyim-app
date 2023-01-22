@@ -33,7 +33,7 @@ import { toast } from "react-hot-toast";
 export const Checkout = () => {
   const basket = useSelector((state) => state.basket.basket);
   const total = useSelector((state) => state.basket.total);
-  // const amount = useSelector((state) => state.basket.amount);
+
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();

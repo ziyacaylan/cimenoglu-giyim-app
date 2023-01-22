@@ -10,7 +10,7 @@ import "./directory.styles.scss";
 const Directory = ({ categories }) => {
   //console.log(categories);
   return (
-    <Container maxWidth="xl">
+    <>
       <Box
         sx={{
           display: "flex",
@@ -59,7 +59,7 @@ const Directory = ({ categories }) => {
           <CategoryItem category={category} key={category.id} />
         ))}
       </Box>
-    </Container>
+    </>
   );
 };
 

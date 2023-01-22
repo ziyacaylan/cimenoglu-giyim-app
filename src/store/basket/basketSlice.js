@@ -15,12 +15,10 @@ export const categorySlice = createSlice({
       const isAddProduct = state.basket.some((item) => item.id === product_id);
 
       if (isAddProduct) {
-        console.log("ürün ekli işte");
         //ürün ekli arttır
         const index = state.basket.findIndex((object) => {
           return object.id === product_id;
         });
-        console.log(index);
         state.basket[index].amount += 1;
         state.amount += 1;
       } else {
@@ -28,7 +26,6 @@ export const categorySlice = createSlice({
         state.basket = [...state.basket, { ...payload, amount: 1 }];
         state.amount += 1;
       }
-      console.log(state.basket);
     },
     clearBasket: (state, action) => {
       state.basket = [];

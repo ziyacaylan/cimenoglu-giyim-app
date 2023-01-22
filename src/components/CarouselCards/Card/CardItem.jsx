@@ -19,6 +19,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import StarIcon from "@mui/icons-material/Star";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import { toast, Toaster } from "react-hot-toast";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -35,9 +36,8 @@ const CardItem = ({ product }) => {
   const dispatch = useDispatch();
 
   const handleClick = (product) => {
-    //console.log(product);
-    // dispatch(addProduct({ ...product }));
-    //dispatch(increase(product.id));
+    dispatch(addProduct({ ...product }));
+    toast.success("Product added to basket");
   };
   return (
     <Card sx={{ minWidth: "250px", maxWidth: "300px" }}>
@@ -125,7 +125,7 @@ const CardItem = ({ product }) => {
           variant="contained"
           sx={{ borderRadius: "15px" }}
           startIcon={<ShoppingCartIcon />}
-          // onClick={() => handleClick(product)}
+          onClick={() => handleClick(product)}
         >
           add to card
         </Button>

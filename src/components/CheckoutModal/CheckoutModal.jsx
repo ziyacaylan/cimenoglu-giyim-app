@@ -239,14 +239,13 @@ const CheckoutModal = ({ handleOpen, handleClose, open }) => {
                   value={country}
                   onChange={handleChangeCountry}
                 >
-                  {/* <MenuItem value="" key={0}>
-                    <em>None</em>
-                  </MenuItem> */}
-                  {countries.map((country) => (
-                    <MenuItem value={country.label} key={countries.phone}>
-                      {country.label}
-                    </MenuItem>
-                  ))}
+                  {React.Children.toArray(
+                    countries.map((country) => (
+                      <MenuItem value={country.label} key={countries.phone}>
+                        {country.label}
+                      </MenuItem>
+                    ))
+                  )}
                 </Select>
               </FormControl>
             </FormGroup>
