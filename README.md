@@ -16,6 +16,9 @@ This is a web application for the clothing brand "Cimenoglu Giyim." It allows cu
 - Material-UI
 - Firebase
 - Redux
+- React-router-dom-v6
+- Bootstrap
+- Carousel
 
 ## Getting started
 
