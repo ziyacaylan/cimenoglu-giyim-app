@@ -50,7 +50,7 @@ function App() {
   const RequireAuth = ({ children }) => {
     return currentUser ? children : <Navigate to="/sign-in" />;
   };
-  console.log(correntCategory);
+  //console.log(correntCategory);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -59,7 +59,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<Home />} />
-            <Route path="/search" element={<Search />} />
+            <Route path="/search/*" element={<Search />} />
             <Route path="shop/*" element={<Shop />}>
               <Route element={<Categories />} index />
               <Route

@@ -4,6 +4,7 @@ import themeReducer from "./theme/themeSlice";
 import categorySlice from "./category/categorySlice";
 import productsSlice from "./products/productsSlice";
 import basketSlice from "./basket/basketSlice";
+import searchSlice from "./search/searchSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     categories: categorySlice,
     products: productsSlice,
     basket: basketSlice,
+    search: searchSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

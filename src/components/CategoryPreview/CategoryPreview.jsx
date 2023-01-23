@@ -1,9 +1,8 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import ProductCard from "../ProductCard/ProductCard";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCurrentCategory } from "../../store/category/categorySlice";
 
 const CategoryPreview = ({ category }) => {

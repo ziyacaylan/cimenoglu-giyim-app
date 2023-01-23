@@ -35,7 +35,7 @@ const Orders = () => {
   useEffect(() => {
     (async () => {
       const data = await getDocumentFromFirestore("orders", user.uid);
-      console.log(data);
+      //console.log(data);
       setOrders(data);
     })();
   }, []);

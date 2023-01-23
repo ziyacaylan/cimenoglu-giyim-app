@@ -7,11 +7,8 @@ import "./navigation.styles.scss";
 
 import DarkModeSwitch from "../../components/DarkModeWsitch";
 
-import { useSelector } from "react-redux";
 import { logout } from "../../store/auth/authSlice.js";
-import { useDispatch } from "react-redux";
-
-import ProfileMenuButton from "../ProfileMenuButton/ProfileMenuButton";
+import { useDispatch, useSelector } from "react-redux";
 
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -38,6 +35,8 @@ import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import BasketMenu from "./BasketMenu";
 import { toast } from "react-hot-toast";
+
+import { addSearchText } from "../../store/search/searchSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -88,9 +87,18 @@ const Navigation = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [basketAnchorEl, setBasketAnchorEl] = useState(null);
+  const [searchText, setSearchText] = useState("");
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchText) {
+      dispatch(addSearchText(searchText));
+      navigate(`/search/${searchText}`, { replace: true });
+    }
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -329,7 +337,7 @@ const Navigation = () => {
               <CrwnLogo className="logo" />
             </Link>
           </IconButton>
-
+          {/* Search  */}
           <Box
             sx={{
               flexGrow: 1,
@@ -337,6 +345,8 @@ const Navigation = () => {
               alignItems: "center",
               justifyContent: "center",
             }}
+            component="form"
+            onSubmit={handleSearch}
           >
             <Search>
               <SearchIconWrapper>
@@ -345,6 +355,8 @@ const Navigation = () => {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
               />
             </Search>
           </Box>
