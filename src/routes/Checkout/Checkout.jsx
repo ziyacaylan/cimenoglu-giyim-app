@@ -21,6 +21,7 @@ import Divider from "@mui/material/Divider";
 import PaymentIcon from "@mui/icons-material/Payment";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   increase,
   decrease,
@@ -32,18 +33,24 @@ import { toast } from "react-hot-toast";
 
 export const Checkout = () => {
   const basket = useSelector((state) => state.basket.basket);
+  const user = useSelector((state) => state.auth.user);
   const total = useSelector((state) => state.basket.total);
 
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(calculateTotals());
   }, [basket]);
 
   const handleOpen = () =>
-    basket.length > 0 ? setOpen(true) : toast.error("Basket is empty");
+    user
+      ? basket.length > 0
+        ? setOpen(true)
+        : toast.error("Basket is empty")
+      : navigate("/sign-in", { replace: true });
   const handleClose = () => setOpen(false);
 
   //console.log(basket);

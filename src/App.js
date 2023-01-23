@@ -34,6 +34,7 @@ function App() {
   const [mode, setMode] = useState("dark");
   const darkMode = useSelector((state) => state.theme.darkMode);
   const user = useSelector((state) => state.auth.user);
+  const basket = useSelector((state) => state.basket.basket);
   const correntCategory = useSelector(
     (state) => state.categories.currentCategory
   );
@@ -69,7 +70,15 @@ function App() {
             </Route>
             <Route
               path="/checkout"
-              element={user ? <Checkout /> : <Navigate to="/" />}
+              element={
+                user ? (
+                  <Checkout />
+                ) : basket ? (
+                  <Checkout />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             />
 
             <Route element={<LoginLayout />}>
