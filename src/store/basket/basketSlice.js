@@ -4,7 +4,7 @@ export const categorySlice = createSlice({
   name: "basket",
   initialState: {
     basket: JSON.parse(localStorage.getItem("basket")) ?? [],
-    total: JSON.parse(localStorage.getItem("total")).length ?? 0,
+    total: JSON.parse(localStorage.getItem("total")) ?? 0,
     amount: JSON.parse(localStorage.getItem("amount")) ?? 0,
     isLoading: false,
     error: null,
