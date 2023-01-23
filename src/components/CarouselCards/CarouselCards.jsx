@@ -71,15 +71,21 @@ const CarouselCards = () => {
         <Carousel style={{ height: 500, margin: "20px" }}>
           {React.Children.toArray(
             reviews.map((review, index) => (
-              <Carousel.Item style={{ height: 500, minWidth: 300 }}>
+              <Carousel.Item
+                style={{
+                  height: 500,
+                  minWidth: 250,
+                  flexWrap: "wrap",
+                }}
+              >
                 <Stack
                   direction="horizontal"
-                  className="h-100 justify-content-center align-items-center"
+                  className="h-100 justify-content-space-between align-items-center"
                   gap={3}
                 >
                   {React.Children.toArray(
                     randomProducts().map((product) => (
-                      <CardItem product={product} />
+                      <CardItem product={product} className="flex-wrap" />
                     ))
                   )}
                 </Stack>
