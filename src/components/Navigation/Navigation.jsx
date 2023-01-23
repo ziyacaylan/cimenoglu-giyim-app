@@ -153,6 +153,15 @@ const Navigation = () => {
       setBasketAnchorEl(event.currentTarget);
     }
   };
+  const mobileHandleClickShop = () => {
+    navigate("/shop", { replace: true });
+    handleMobileMenuClose();
+  };
+  const mobileHandleClickBasket = () => {
+    setBasketAnchorEl(!basketAnchorEl);
+    handleMobileMenuClose();
+  };
+
   // basket menu
   const basketMenuId = "primary-basket-menu";
   const renderBasketMenu = (
@@ -268,7 +277,7 @@ const Navigation = () => {
       onClose={handleMobileMenuClose}
     >
       {/* shop */}
-      <MenuItem onClick={() => navigate("/shop", { replace: true })}>
+      <MenuItem onClick={mobileHandleClickShop}>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <LocalGroceryStoreIcon sx={{ color: "primary.main" }} />
         </IconButton>
@@ -277,7 +286,7 @@ const Navigation = () => {
         </Typography>
       </MenuItem>
       {/* basket */}
-      <MenuItem onClick={() => setBasketAnchorEl(!basketAnchorEl)}>
+      <MenuItem onClick={mobileHandleClickBasket}>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"

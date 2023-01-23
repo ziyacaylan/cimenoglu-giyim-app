@@ -85,7 +85,7 @@ const CarouselCards = () => {
                 >
                   {React.Children.toArray(
                     randomProducts().map((product) => (
-                      <CardItem product={product} className="flex-wrap" />
+                      <CardItem product={product} />
                     ))
                   )}
                 </Stack>
