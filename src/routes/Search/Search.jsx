@@ -27,7 +27,7 @@ function valuetext(value) {
 }
 
 const Search = () => {
-  const [value, setValue] = React.useState([10, 35]);
+  const [value, setValue] = React.useState([1, 200]);
   const searchText = useSelector((state) => state.search.searchText);
   const categories = useSelector((state) => state.categories.categories);
   const dispatch = useDispatch();
