@@ -34,8 +34,12 @@ const SignIn = () => {
 
   const handleSubmitLoginWithGoogle = async () => {
     const user = await logGoogleUser();
+    // console.log("buradan geldi");
+    //console.log(user);
     if (user) {
-      navigate("/", { replace: true });
+      //navigate("/", { replace: true });
+      navigate("/profile/update", { replace: true });
+      user && onUserShateChanged();
     }
   };
 

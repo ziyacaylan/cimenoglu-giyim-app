@@ -198,25 +198,6 @@ onSnapshot(productsRef, (snapshot) => {
 
 // get Products
 export const getOrders = async () => {
-  // const docRef = doc(db, "orders", "SF");
-  // const docSnap = await getDoc(docRef);
-  // if (docSnap.exists()) {
-  //   console.log("Document data:", docSnap.data());
-  // } else {
-  //   // doc.data() will be undefined in this case
-  //   console.log("No such document!");
-  // }
-  // const data = await getDocs(collection(db, "orders")).then((querySnapshot) => {
-  //   const newData = querySnapshot.docs.map((doc) => ({
-  //     ...doc.data(),
-  //     id: doc.id,
-  //   }));
-  //   // store.dispatch(setProducts(newData));
-  //   return newData;
-  // });
-
-  // return data;
-
   const snapshot = await collection("orders").get();
   return snapshot.docs.map((doc) => doc.data());
 };
